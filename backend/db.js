@@ -1,15 +1,15 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-let db;
-
 async function connectToDb(callback) {
-  const client = new MongoClient(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.mqsbp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
   try {
-    await client.connect();
-    db = client.db('SPEEDDB');
+    await mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.mqsbp.mongodb.net/SPEEDDB?retryWrites=true&w=majority`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to MongoDB');
     callback();
   } catch (err) {
     console.error('Failed to connect to the database', err);
@@ -17,4 +17,4 @@ async function connectToDb(callback) {
   }
 }
 
-export { db, connectToDb };
+export { connectToDb };

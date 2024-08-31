@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import axios from "axios";
 import formStyles from "../../styles/Form.module.scss";
 
 const NewDiscussion = () => {
@@ -13,8 +14,8 @@ const NewDiscussion = () => {
   const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log(
-      JSON.stringify({
+    try {
+      const response = await axios.post("http://localhost:8000/api/articles", {
         title,
         authors,
         source,
@@ -22,11 +23,24 @@ const NewDiscussion = () => {
         doi,
         summary,
         linked_discussion: linkedDiscussion,
-      })
-    );
-  };
+      });
 
-  // Some helper methods for the authors array
+      if (response.status === 201) {
+        alert("Article submitted successfully!");
+        // Clear the form after successful submission
+        setTitle("");
+        setAuthors([]);
+        setSource("");
+        setPubYear(0);
+        setDoi("");
+        setSummary("");
+        setLinkedDiscussion("");
+      }
+    } catch (error) {
+      console.error("Error submitting article:", error);
+      alert("Failed to submit the article. Please try again.");
+    }
+  };
 
   const addAuthor = () => {
     setAuthors(authors.concat([""]));
@@ -38,13 +52,9 @@ const NewDiscussion = () => {
 
   const changeAuthor = (index: number, value: string) => {
     setAuthors(
-      authors.map((oldValue, i) => {
-        return index === i ? value : oldValue;
-      })
+      authors.map((oldValue, i) => (index === i ? value : oldValue))
     );
   };
-
-  // Return the full form
 
   return (
     <div className="container">
@@ -63,29 +73,27 @@ const NewDiscussion = () => {
         />
 
         <label htmlFor="author">Authors:</label>
-        {authors.map((author, index) => {
-          return (
-            <div key={`author ${index}`} className={formStyles.arrayItem}>
-              <input
-                type="text"
-                name="author"
-                value={author}
-                onChange={(event) => changeAuthor(index, event.target.value)}
-                className={formStyles.formItem}
-              />
-              <button
-                onClick={() => removeAuthor(index)}
-                className={formStyles.buttonItem}
-                style={{ marginLeft: "3rem" }}
-                type="button"
-              >
-                -
-              </button>
-            </div>
-          );
-        })}
+        {authors.map((author, index) => (
+          <div key={`author ${index}`} className={formStyles.arrayItem}>
+            <input
+              type="text"
+              name="author"
+              value={author}
+              onChange={(event) => changeAuthor(index, event.target.value)}
+              className={formStyles.formItem}
+            />
+            <button
+              onClick={() => removeAuthor(index)}
+              className={formStyles.buttonItem}
+              style={{ marginLeft: "3rem" }}
+              type="button"
+            >
+              -
+            </button>
+          </div>
+        ))}
         <button
-          onClick={() => addAuthor()}
+          onClick={addAuthor}
           className={formStyles.buttonItem}
           style={{ marginLeft: "auto" }}
           type="button"
@@ -114,11 +122,7 @@ const NewDiscussion = () => {
           value={pubYear}
           onChange={(event) => {
             const val = event.target.value;
-            if (val === "") {
-              setPubYear(0);
-            } else {
-              setPubYear(parseInt(val));
-            }
+            setPubYear(val === "" ? 0 : parseInt(val));
           }}
         />
 
