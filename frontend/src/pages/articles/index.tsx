@@ -30,8 +30,8 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 
   return (
     <div className="container">
-      <h1>Articles Index Page</h1>
-      <p>Page containing a table of articles:</p>
+      <h1>Articles</h1>
+      <p>Welcome to the SPEED database</p>
       <SortableTable headers={headers} data={articles} />
     </div>
   );
