@@ -1,0 +1,60 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Construction and testing of the front-end (Next.js)
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+
+      - name: Install dependencies for frontend
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build frontend (Next.js)
+        run: |
+          cd frontend
+          npm run build  # 构建 Next.js 项目
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm run test  # 运行测试
+
+  # Construction and testing of back-end (Express.js)
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  
+
+      - name: Install dependencies for backend
+        run: |
+          cd backend
+          npm install
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm run test  # 运行测试脚本，如 Mocha、Jest 等
+
