@@ -39,7 +39,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
   try {
-    const response = await axios.get("http://localhost:8000/api/articles");
+    const response = await axios.get("http://localhost:8000/api/articles");    
     const articles = response.data.map((article: any) => ({
       id: article._id,
       title: article.title,
