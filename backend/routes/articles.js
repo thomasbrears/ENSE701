@@ -5,6 +5,7 @@ const router = express.Router();
 
 // POST /api/articles - Create a new article
 router.post('/', async (req, res) => {
+  console.log("POST /api/articles - Create a new article")
   try {
     const { title, authors, source, publication_year, doi, summary, linked_discussion } = req.body;
 
@@ -29,6 +30,7 @@ router.post('/', async (req, res) => {
 
 // GET /api/articles - Retrieve all articles
 router.get('/', async (req, res) => {
+  console.log("GET /api/articles - Retrieve all articles")
   try {
     const articles = await Article.find();
     res.status(200).json(articles);
@@ -40,6 +42,7 @@ router.get('/', async (req, res) => {
 
 // GET /api/articles/:id - Retrieve a single article by ID
 router.get('/:id', async (req, res) => {
+  console.log(`"GET /api/articles/${req.params.id} - Retrieve a single article by ID"`)
   try {
     const article = await Article.findById(req.params.id);
     if (!article) return res.status(404).json({ message: 'Article not found' });
