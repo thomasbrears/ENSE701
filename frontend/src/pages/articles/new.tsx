@@ -13,9 +13,8 @@ const NewDiscussion = () => {
 
   const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     try {
-      const response = await axios.post("http://localhost:8000/api/articles", {
+      const response = await axios.post(process.env.ACCESS_URL +"/api/articles", {
         title,
         authors,
         source,

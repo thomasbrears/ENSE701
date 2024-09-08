@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/Nav.module.scss";
 
-const NavBar = () => {
+type Props = {
+  children?: React.ReactNode;
+};
+
+const NavBar = ({ children }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -35,6 +39,7 @@ const NavBar = () => {
             </div>
           </div>
         </div>
+        {children}
       </nav>
     </div>
   );

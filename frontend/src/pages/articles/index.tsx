@@ -38,8 +38,8 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
-  try {
-    const response = await axios.get("http://localhost:8000/api/articles");    
+  try {    
+    const response = await axios.get(process.env.ACCESS_URL + "/api/articles");    
     const articles = response.data.map((article: any) => ({
       id: article._id,
       title: article.title,
@@ -57,7 +57,8 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
       },
     };
   } catch (error) {
-    console.error("Error fetching articles:", error);
+    // console.error("Error fetching articles:", error);
+    console.error("Error fetching articles");
     return {
       props: {
         articles: [], // Return an empty array if there's an error
