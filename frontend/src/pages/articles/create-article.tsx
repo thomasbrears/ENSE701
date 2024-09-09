@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import axios from "axios";
-import formStyles from "../../styles/Form.module.scss";
+import formStyles from "../../styles/Forms.module.scss";
 
 const NewDiscussion = () => {
   const [title, setTitle] = useState("");
@@ -13,8 +13,9 @@ const NewDiscussion = () => {
 
   const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     try {
-      const response = await axios.post(process.env.ACCESS_URL +"/api/articles", {
+      const response = await axios.post("http://localhost:8000/api/articles", {
         title,
         authors,
         source,
