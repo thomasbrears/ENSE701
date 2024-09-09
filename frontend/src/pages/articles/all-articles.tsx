@@ -1,6 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
-import SortableTable from "../../components/table/SortableTable";
+import Layout from "../../components/Layout";
+import SortableTable from "../../components/SortableTable";
 
 interface ArticlesInterface {
   id: string;
@@ -17,7 +18,7 @@ type ArticlesProps = {
   articles: ArticlesInterface[];
 };
 
-const Articles: NextPage<ArticlesProps> = ({ articles }) => {
+const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
   const headers: { key: keyof ArticlesInterface; label: string }[] = [
     { key: "title", label: "Title" },
     { key: "authors", label: "Authors" },
@@ -29,17 +30,19 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   ];
 
   return (
-    <div className="container">
-      <h1>Articles</h1>
-      <p>Welcome to the SPEED database</p>
-      <SortableTable headers={headers} data={articles} />
+    <div>
+      <div className="container">
+        <h1>All Articles</h1>
+        <p>Welcome to the SPEED database</p>
+        <SortableTable headers={headers} data={articles} />
+      </div>
     </div>
   );
 };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
-  try {    
-    const response = await axios.get(process.env.ACCESS_URL + "/api/articles");    
+  try {
+    const response = await axios.get("http://localhost:8000/api/articles");
     const articles = response.data.map((article: any) => ({
       id: article._id,
       title: article.title,
@@ -57,8 +60,7 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
       },
     };
   } catch (error) {
-    // console.error("Error fetching articles:", error);
-    console.error("Error fetching articles");
+    console.error("Error fetching articles:", error);
     return {
       props: {
         articles: [], // Return an empty array if there's an error
@@ -67,4 +69,4 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
   }
 };
 
-export default Articles;
+export default AllArticles;
