@@ -6,7 +6,7 @@ import NavItem from "./nav/NavItem";
 const PopulatedNavBar = () => {
   return (
     <NavBar>
-      <NavItem>SPEED</NavItem>
+      {/* <NavItem>SPEED</NavItem>
       <NavItem route="/" end>
         Home
       </NavItem>
@@ -16,7 +16,7 @@ const PopulatedNavBar = () => {
           <NavItem route="/articles">View articles</NavItem>
           <NavItem route="/articles/new">Submit new</NavItem>
         </NavDropdown>
-      </NavItem>
+      </NavItem> */}
     </NavBar>
   );
 };
