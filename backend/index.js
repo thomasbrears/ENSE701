@@ -21,6 +21,8 @@ app.use(cors());
 const PORT = process.env.PORT || 8000;
 
 // Routes
+
+
 app.use('/api/articles', articleRoutes);
 //app.use('/api/moderation', moderationRoutes);
 //app.use('/api/analysis', analysisRoutes);
