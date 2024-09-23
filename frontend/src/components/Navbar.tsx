@@ -27,11 +27,11 @@ const NavBar = () => {
 
         {/* Nav Links */}
         <div className={`${styles.navLinks} ${isOpen ? styles.show : ""}`}>
-          <NavItem route="/articles/all-articles">All Articles</NavItem>
-          <NavItem route="/articles/create-article">Create New Article</NavItem>
+          <NavItem route="/articles/all-articles">Articles</NavItem>
+          <NavItem route="/articles/create-article">New Article</NavItem>
           <NavItem route="/articles/lookup-submission">Lookup Submission</NavItem>
 
-          {/* Admin Dropdown */}
+          {/* Admin Dropdown 
           <div className={styles.adminDropdown}>
             <NavItem dropdown>
               Admin <IoMdArrowDropdown />
@@ -40,13 +40,19 @@ const NavBar = () => {
               <NavItem route="/admin/dashboard">Dashboard</NavItem>
               <NavItem route="/admin/rejected-articles">Rejected Articles</NavItem>
             </div>
-          </div>
+          </div>*/}
+
+          {/* Admin Dashboard */}
+          <NavItem route="/admin/dashboard">Admin</NavItem>
+
+          {/* Rejected Articles */}
+          <NavItem route="/admin/rejected-articles">Rejected Articles</NavItem>
 
           {/* Moderator Dashboard */}
-          <NavItem route="/moderator/moderator-dashboard">Moderator Dashboard</NavItem>
+          <NavItem route="/moderator/moderator-dashboard">Moderator</NavItem>
 
           {/* Analyst Dashboard */}
-          <NavItem route="/analyst/analyst-dashboard">Analyst Dashboard</NavItem>
+          <NavItem route="/analyst/analyst-dashboard">Analyst</NavItem>
 
           {/* Search */}
           <NavItem route="/search/search-results">Search</NavItem>

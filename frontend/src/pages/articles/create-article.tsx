@@ -5,36 +5,55 @@ import formStyles from "../../styles/Forms.module.scss";
 const NewDiscussion = () => {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState<string[]>([]);
-  const [source, setSource] = useState("");
-  const [pubYear, setPubYear] = useState<number>(0);
+  const [pubYear, setPubYear] = useState<number | string>("");
+  const [journal, setJournal] = useState("");
+  const [sePractice, setSePractice] = useState("");
+  const [claim, setClaim] = useState("");
+  const [researchType, setResearchType] = useState("");
   const [doi, setDoi] = useState("");
   const [summary, setSummary] = useState("");
-  const [linkedDiscussion, setLinkedDiscussion] = useState("");
+  const [volume, setVolume] = useState("");
+  const [number, setNumber] = useState("");
+  const [pages, setPages] = useState("");
 
   const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/articles", {
+      const articleData = {
         title,
         authors,
-        source,
         publication_year: pubYear,
+        journal,
+        se_practice: sePractice,
+        claim,
+        research_type: researchType,
         doi,
         summary,
-        linked_discussion: linkedDiscussion,
-      });
+        volume,
+        number,
+        pages,
+      };
+
+      console.log("Submitting article with data:", articleData);
+
+      const response = await axios.post("http://localhost:8000/api/articles", articleData);
 
       if (response.status === 201) {
         alert("Article submitted successfully!");
         // Clear the form after successful submission
         setTitle("");
         setAuthors([]);
-        setSource("");
-        setPubYear(0);
+        setPubYear("");
+        setJournal("");
+        setSePractice("");
+        setClaim("");
+        setResearchType("");
         setDoi("");
         setSummary("");
-        setLinkedDiscussion("");
+        setVolume("");
+        setNumber("");
+        setPages("");
       }
     } catch (error) {
       console.error("Error submitting article:", error);
@@ -42,112 +61,181 @@ const NewDiscussion = () => {
     }
   };
 
-  const addAuthor = () => {
-    setAuthors(authors.concat([""]));
-  };
-
-  const removeAuthor = (index: number) => {
-    setAuthors(authors.filter((_, i) => i !== index));
-  };
-
-  const changeAuthor = (index: number, value: string) => {
-    setAuthors(
-      authors.map((oldValue, i) => (index === i ? value : oldValue))
-    );
+  const addAuthor = () => setAuthors([...authors, ""]);
+  const removeAuthor = (index: number) => setAuthors(authors.filter((_, i) => i !== index));
+  const updateAuthor = (index: number, value: string) => {
+    setAuthors(authors.map((author, i) => (i === index ? value : author)));
   };
 
   return (
-    <div className="container">
-      <h1>New Article</h1>
+    <div className={formStyles.container}>
+      <h1 className={formStyles.header}>Submit a New Article</h1>
       <form className={formStyles.form} onSubmit={submitNewArticle}>
-        <label htmlFor="title">Title:</label>
-        <input
-          className={formStyles.formItem}
-          type="text"
-          name="title"
-          id="title"
-          value={title}
-          onChange={(event) => {
-            setTitle(event.target.value);
-          }}
-        />
+        <div className={formStyles.field}>
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter the article title"
+            required
+          />
+        </div>
 
-        <label htmlFor="author">Authors:</label>
-        {authors.map((author, index) => (
-          <div key={`author ${index}`} className={formStyles.arrayItem}>
+        <div className={formStyles.field}>
+          <label>Authors</label>
+          {authors.map((author, index) => (
+            <div key={index} className={formStyles.authorField}>
+              <input
+                type="text"
+                value={author}
+                onChange={(e) => updateAuthor(index, e.target.value)}
+                placeholder={`Author ${index + 1}`}
+                required
+                className={formStyles.input} 
+              />
+              <button type="button" onClick={() => removeAuthor(index)} className={formStyles.removeButton}>
+                Remove
+              </button>
+            </div>
+          ))}
+          <button type="button" onClick={addAuthor} className={formStyles.addButton}>
+            Add Author
+          </button>
+        </div>
+
+        <div className={formStyles.field}>
+          <label htmlFor="pubYear">Year of Publication</label>
+          <input
+            type="number"
+            id="pubYear"
+            value={pubYear}
+            onChange={(e) => setPubYear(e.target.value)}
+            placeholder="e.g., 2021"
+            required
+            className={formStyles.input} 
+          />
+        </div>
+
+        <div className={formStyles.field}>
+          <label htmlFor="journal">Journal/Conference Name</label>
+          <input
+            type="text"
+            id="journal"
+            value={journal}
+            onChange={(e) => setJournal(e.target.value)}
+            placeholder="Enter the journal or conference name"
+            required
+            className={formStyles.input} 
+          />
+        </div>
+
+        <div className={formStyles.inlineGroup}>
+          <div className={formStyles.inlineItem}>
+            <label htmlFor="volume">Volume</label>
             <input
               type="text"
-              name="author"
-              value={author}
-              onChange={(event) => changeAuthor(index, event.target.value)}
-              className={formStyles.formItem}
+              id="volume"
+              value={volume}
+              onChange={(e) => setVolume(e.target.value)}
+              placeholder="e.g., 34"
+              className={`${formStyles.input} ${formStyles.shortTextField}`} 
             />
-            <button
-              onClick={() => removeAuthor(index)}
-              className={formStyles.buttonItem}
-              style={{ marginLeft: "3rem" }}
-              type="button"
-            >
-              -
-            </button>
           </div>
-        ))}
-        <button
-          onClick={addAuthor}
-          className={formStyles.buttonItem}
-          style={{ marginLeft: "auto" }}
-          type="button"
-        >
-          +
-        </button>
+          <div className={formStyles.inlineItem}>
+            <label htmlFor="number">Number</label>
+            <input
+              type="text"
+              id="number"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              placeholder="e.g., 2"
+              className={`${formStyles.input} ${formStyles.shortTextField}`} 
+            />
+          </div>
+          <div className={formStyles.inlineItem}>
+            <label htmlFor="pages">Pages</label>
+            <input
+              type="text"
+              id="pages"
+              value={pages}
+              onChange={(e) => setPages(e.target.value)}
+              placeholder="e.g., 123-145"
+              className={`${formStyles.input} ${formStyles.shortTextField}`} 
+            />
+          </div>
+        </div>
 
-        <label htmlFor="source">Source:</label>
-        <input
-          className={formStyles.formItem}
-          type="text"
-          name="source"
-          id="source"
-          value={source}
-          onChange={(event) => {
-            setSource(event.target.value);
-          }}
-        />
+        <div className={formStyles.field}>
+          <label htmlFor="doi">DOI</label>
+          <input
+            type="text"
+            id="doi"
+            value={doi}
+            onChange={(e) => setDoi(e.target.value)}
+            placeholder="Enter the DOI"
+            className={formStyles.input} 
+          />
+        </div>
 
-        <label htmlFor="pubYear">Publication Year:</label>
-        <input
-          className={formStyles.formItem}
-          type="number"
-          name="pubYear"
-          id="pubYear"
-          value={pubYear}
-          onChange={(event) => {
-            const val = event.target.value;
-            setPubYear(val === "" ? 0 : parseInt(val));
-          }}
-        />
+        <div className={formStyles.field}>
+          <label htmlFor="sePractice">SE Practice</label>
+          <input
+            type="text"
+            id="sePractice"
+            value={sePractice}
+            onChange={(e) => setSePractice(e.target.value)}
+            placeholder="e.g., Test-Driven Development"
+            required
+            className={formStyles.input}
+          />
+        </div>
 
-        <label htmlFor="doi">DOI:</label>
-        <input
-          className={formStyles.formItem}
-          type="text"
-          name="doi"
-          id="doi"
-          value={doi}
-          onChange={(event) => {
-            setDoi(event.target.value);
-          }}
-        />
+        <div className={formStyles.field}>
+          <label htmlFor="claim">Claim</label>
+          <textarea
+            id="claim"
+            value={claim}
+            onChange={(e) => setClaim(e.target.value)}
+            placeholder="State the claim made in the article"
+            required
+            className={`${formStyles.input} ${formStyles.longTextField}`} 
+          />
+        </div>
 
-        <label htmlFor="summary">Summary:</label>
-        <textarea
-          className={formStyles.formTextArea}
-          name="summary"
-          value={summary}
-          onChange={(event) => setSummary(event.target.value)}
-        />
+        <div className={formStyles.field}>
+          <label htmlFor="researchType">Type of Research</label>
+          <select
+            id="researchType"
+            value={researchType}
+            onChange={(e) => setResearchType(e.target.value)}
+            required
+            className={formStyles.input}
+          >
+            <option value="">Select a research type</option>
+            <option value="case study">Case Study</option>
+            <option value="experiment">Experiment</option>
+            <option value="survey">Survey</option>
+            <option value="literature review">Literature Review</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
 
-        <button className={formStyles.formItem} type="submit">
-          Submit
+        <div className={formStyles.field}>
+          <label htmlFor="summary">Summary</label>
+          <textarea
+            id="summary"
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="Provide a brief summary of the article"
+            required
+            className={`${formStyles.input} ${formStyles.longTextField}`} 
+          />
+        </div>
+
+        <button type="submit" className={formStyles.submitButton}>
+          Submit Article
         </button>
       </form>
     </div>

@@ -1,17 +1,16 @@
 import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
-import Layout from "../../components/Layout";
+import Link from "next/link";
 import SortableTable from "../../components/SortableTable";
 
 interface ArticlesInterface {
   id: string;
   title: string;
   authors: string;
-  source: string;
   pubyear: string;
-  doi: string;
-  claim: string | null;  // Allow null values
-  evidence: string;
+  journal: string;
+  se_practice: string;
+  research_type: string;
 }
 
 type ArticlesProps = {
@@ -19,22 +18,26 @@ type ArticlesProps = {
 };
 
 const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
-  const headers: { key: keyof ArticlesInterface; label: string }[] = [
+  const headers: { key: keyof ArticlesInterface | 'actions'; label: string }[] = [
     { key: "title", label: "Title" },
     { key: "authors", label: "Authors" },
-    { key: "source", label: "Source" },
     { key: "pubyear", label: "Publication Year" },
-    { key: "doi", label: "DOI" },
-    { key: "claim", label: "Claim" },
-    { key: "evidence", label: "Evidence" },
+    { key: "journal", label: "Journal/Conference" },
+    { key: "se_practice", label: "SE Practice" },
+    { key: "research_type", label: "Research Type" },
+    { key: "actions", label: "" }, // no label - for view button
   ];
+
+  const tableData = articles.map(article => ({
+    ...article,
+    actions: (<Link href={`/articles/${article.id}`} passHref><button style={{ cursor: "pointer", padding: "0.5em 1em", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "4px" }}>View</button></Link>),}));
 
   return (
     <div>
       <div className="container">
-        <h1>All Articles</h1>
+        <h1>All Published Articles</h1>
         <p>Welcome to the SPEED database</p>
-        <SortableTable headers={headers} data={articles} />
+        <SortableTable headers={headers} data={tableData} />
       </div>
     </div>
   );
@@ -42,16 +45,15 @@ const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
   try {
-    const response = await axios.get("http://localhost:8000/api/articles");
+    const response = await axios.get("http://localhost:8000/api/articles/published");
     const articles = response.data.map((article: any) => ({
       id: article._id,
       title: article.title,
       authors: article.authors.join(", "),
-      source: article.source,
-      pubyear: article.publication_year,
-      doi: article.doi,
-      claim: article.claim ?? null, 
-      evidence: article.evidence ?? null, 
+      pubyear: article.publication_year.toString(),
+      journal: article.journal ?? "", 
+      se_practice: article.se_practice ?? "",
+      research_type: article.research_type ?? "",
     }));
 
     return {
