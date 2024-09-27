@@ -4,7 +4,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #ffffff; // white background
-  color: #23360e; // Dark green 
+  color: #23360e; // Dark green
   margin: 0;
   padding: 0;
   line-height: 1.6;
@@ -12,7 +12,7 @@ body {
 
 .container {
   max-width: 1200px;
-  margin: 0 auto; 
+  margin: 0 auto;
   padding: 0 1em;
 }
 
@@ -23,19 +23,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #7b8f1d; // Lighter green 
+  color: #7b8f1d; // Lighter green
   text-decoration: none;
   transition: color 0.3s;
 }
 
 a:hover {
-  color: #456226; //  lighter green 
+  color: #456226; //  lighter green
 }
 
 button {
   font-family: inherit;
-  color: #ffffff; // White 
-  background-color: #23360e; // Dark green 
+  color: #ffffff; // White
+  background-color: #23360e; // Dark green
   border: none;
   padding: 0.75em 1.5em;
   border-radius: 5px;

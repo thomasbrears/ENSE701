@@ -34,7 +34,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
       <h1 className={styles.title}>{article.title}</h1>
       <div className={styles.divider}></div>
       <div className={styles.subtitle}>
-        <b>{article.journal}</b> 
+        <b>{article.journal}</b>
         <br />
         (Volume: <b>{article.volume}</b>, Number: <b>{article.number}</b>, Pages: <b>{article.pages}</b>)
         <br />
@@ -99,11 +99,11 @@ export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ para
           title: article.title || "No title available",
           authors: article.authors ? article.authors.join(", ") : "No authors available",
           journal: article.journal || "No journal name available",
-          se_practice: article.se_practice || "No SE practice available", 
+          se_practice: article.se_practice || "No SE practice available",
           research_type: article.research_type || "No research type available",
           publication_year: article.publication_year?.toString() || "Unknown",
-          volume: article.volume || "-", 
-          number: article.number || "-", 
+          volume: article.volume || "-",
+          number: article.number || "-",
           pages: article.pages || "-",
           doi: article.doi || "No DOI available",
           claim: article.claim || "No Claim available",

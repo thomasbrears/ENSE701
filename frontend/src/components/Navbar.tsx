@@ -31,7 +31,7 @@ const NavBar = () => {
           <NavItem route="/articles/create-article">New Article</NavItem>
           <NavItem route="/articles/lookup-submission">Lookup Submission</NavItem>
 
-          {/* Admin Dropdown 
+          {/* Admin Dropdown
           <div className={styles.adminDropdown}>
             <NavItem dropdown>
               Admin <IoMdArrowDropdown />
@@ -54,8 +54,6 @@ const NavBar = () => {
           {/* Analyst Dashboard */}
           <NavItem route="/analyst/analyst-dashboard">Analyst</NavItem>
 
-          {/* Search */}
-          <NavItem route="/search/search-results">Search</NavItem>
         </div>
       </nav>
     </div>
