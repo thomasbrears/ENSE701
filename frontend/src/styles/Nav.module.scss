@@ -1,3 +1,5 @@
+// @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
 .navbarContainer {
   width: 100%;
   background-color: #006400 !important; // green
@@ -41,7 +43,7 @@
   }
 }
 
-.navLinks { 
+.navLinks {
   display: flex;
   gap: 1em;
   align-items: center;
@@ -76,7 +78,7 @@
 
   @media (max-width: 850px) {
     font-size: 0.8em;
-    padding: 0.1em 0; 
+    padding: 0.1em 0;
   }
 }
 
@@ -84,7 +86,7 @@
   color: #d0b50b; // yellow-green
 }
 
-.adminDropdown {  
+.adminDropdown {
   position: relative;
 
   @media (max-width: 768px) {
@@ -93,7 +95,7 @@
   }
 }
 
-.adminDropdownContent {  
+.adminDropdownContent {
   display: none;
   position: absolute;
   background-color: #006400; // green

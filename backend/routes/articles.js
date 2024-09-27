@@ -24,8 +24,8 @@ router.post('/', async (req, res) => {
       title,
       authors,
       source,
-      journal, 
-      se_practice, 
+      journal,
+      se_practice,
       research_type,
       publication_year,
       volume,
@@ -41,23 +41,10 @@ router.post('/', async (req, res) => {
     await newArticle.save();
     res.status(201).json(newArticle);
   } catch (error) {
-    console.error('Error saving the article:', error); 
+    console.error('Error saving the article:', error);
     res.status(500).json({ message: 'Error saving the article', error });
   }
 });
-
-/*// GET /api/articles - Retrieve all articles
-router.get('/', async (req, res) => {
-  console.log("GET /api/articles - Retrieve all articles")
-  try {
-    const articles = await Article.find();
-    res.status(200).json(articles);
-  } catch (error) {
-    console.error('Error retrieving all articles:', error); 
-    res.status(500).json({ message: 'Error fetching articles', error });
-  }
-});
-*/
 
 // GET /api/articles/:id - Retrieve a single article by ID
 router.get('/:id', async (req, res) => {
@@ -67,7 +54,7 @@ router.get('/:id', async (req, res) => {
     if (!article) return res.status(404).json({ message: 'Article not found' });
     res.status(200).json(article);
   } catch (error) {
-    console.error('Error retrieving that article:', error); 
+    console.error('Error retrieving that article:', error);
     res.status(500).json({ message: 'Error fetching article', error });
   }
 });
