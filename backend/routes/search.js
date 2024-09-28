@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
       $or: [
         { title: { $regex: q, $options: 'i' } },      // Search in title
         { authors: { $regex: q, $options: 'i' } },    // Search in authors
-        { publication_year: { $regex: q, $options: 'i'} },
+        { publication_year: !isNaN(q) ? Number(q) : null }, // Direct match for number, only if q is a number
         // Add more fields as needed
       ],
     };
