@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../styles/SearchBar.module.scss";
+import styles from '../styles/SearchBar.module.scss';
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           className={styles.inputField}
           value={searchTerm}
           onChange={handleInputChange}
-          placeholder="Type to search..."
+          placeholder="Type to search by title, author or date..."
           required
         />
         {/* <button className={styles.searchButton} type="submit">Search</button> */}
