@@ -37,10 +37,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           className={styles.inputField}
           value={searchTerm}
           onChange={handleInputChange}
-          placeholder="Type to search..."
+          placeholder="Type to search by title, author or date..."
           required
         />
-        {/* <button className={styles.searchButton} type="submit">Search</button> */}
       </form>
     </div>
   );
