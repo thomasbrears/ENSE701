@@ -49,7 +49,7 @@ const NavBar = () => {
           <NavItem route="/admin/rejected-articles">Rejected Articles</NavItem>
 
           {/* Moderator Dashboard */}
-          <NavItem route="/moderator/moderator-dashboard">Moderator</NavItem>
+          <NavItem route="/moderator/ModeratorQueue">Moderator</NavItem>
 
           {/* Analyst Dashboard */}
           <NavItem route="/analyst/analyst-dashboard">Analyst</NavItem>
