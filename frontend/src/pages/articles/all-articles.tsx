@@ -1,6 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
-import Layout from "../../components/Layout";
 import SortableTable from "../../components/SortableTable";
 
 interface ArticlesInterface {
@@ -40,18 +39,41 @@ const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
   );
 };
 
+
+export async function getArticleById(id: string) {
+  const result = await axios.get("http://127.0.0.1:8000/api/articles/" + id).then(response => {
+    const article: any = response.data;
+    console.log("拿到的文章：", article);
+    return article;
+  });
+
+  return result;
+}
+
+
+export async function getAvagerScore(id: string) {
+  const result = await axios.get("http://127.0.0.1:8000/api/scores/average/" + id).then(response => {
+    const average_score: any = response.data.average_score || 0;
+    console.log("拿到的平均成绩：", average_score);
+    return average_score;
+  });
+
+  return result;
+}
+
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
   try {
-    const response = await axios.get("http://localhost:8000/api/articles");
+    const response = await axios.get("http://127.0.0.1:8000/api/articles");
+
     const articles = response.data.map((article: any) => ({
-      id: article._id,
-      title: article.title,
-      authors: article.authors.join(", "),
-      source: article.source,
-      pubyear: article.publication_year,
-      doi: article.doi,
-      claim: article.claim ?? null, 
-      evidence: article.evidence ?? null, 
+      id: article._id ?? null,
+      title: article.title ?? null,
+      authors: article.authors.join(", ") ?? null,
+      source: article.source ?? null,
+      pubyear: article.publication_year ?? null,
+      doi: article.doi ?? null,
+      claim: article.claim ?? null,
+      evidence: article.evidence ?? null,
     }));
 
     return {
