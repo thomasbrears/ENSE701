@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { connectToDb } from './db.js';
 import articleRoutes from './routes/articles.js';
-import scoreRouters from './routes/score.js';
+import scoreRouters from './routes/scores.js';
 import moderationRoutes from './routes/moderation.js';
 //import analysisRoutes from './routes/analysis.js';
 //import searchRoutes from './routes/search.js';
