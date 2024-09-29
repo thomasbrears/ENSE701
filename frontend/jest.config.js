@@ -17,6 +17,7 @@ module.exports = {
     '<rootDir>/cypress/',
   ],
   moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1', // Use @ to refer to src folder
     '\\.(scss|css|less)$': 'identity-obj-proxy', // Mock CSS modules
   },
 };
