@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import { connectToDb } from './db.js';
 import articleRoutes from './routes/articles.js';
-//import moderationRoutes from './routes/moderation.js';
+import scoreRouters from './routes/score.js';
+import moderationRoutes from './routes/moderation.js';
 //import analysisRoutes from './routes/analysis.js';
 //import searchRoutes from './routes/search.js';
 import dotenv from 'dotenv';
@@ -24,7 +25,9 @@ const PORT = process.env.PORT || 8000;
 
 
 app.use('/api/articles', articleRoutes);
-//app.use('/api/moderation', moderationRoutes);
+app.use('/api/articles', articleRoutes);
+app.use('/api/scores', scoreRouters);
+app.use('/api/moderation', moderationRoutes);
 //app.use('/api/analysis', analysisRoutes);
 //app.use('/api/search', searchRoutes);
 
