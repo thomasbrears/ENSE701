@@ -1,7 +1,12 @@
-export default function Home() {
-    return (
-      <div className="container">
-        <h1>Software Practice Empirical Evidence Database (SPEED)</h1>
-      </div>
-    );
-  }
+import React from "react";
+
+const Home = () => {
+  return (
+    <div>
+      <h1>Welcome to SPEED</h1>
+      <p>This is the home page content...</p>
+    </div>
+  );
+};
+
+export default Home;
