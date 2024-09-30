@@ -39,7 +39,7 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
         {sortedData.map((row, i) => (
           <tr key={i}>
             {headers.map((header) => (
-              <td key={header.key}>{row[header.key]}</td>
+              <td key={header.key} width={1}>{row[header.key]}</td>
             ))}
           </tr>
         ))}

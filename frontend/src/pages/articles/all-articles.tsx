@@ -49,7 +49,7 @@ const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
     { key: "journal", label: "Journal/Conference" },
     { key: "se_practice", label: "SE Practice" },
     { key: "research_type", label: "Research Type" },
-    { key: "actions", label: "" },
+    { key: "actions", label: "Actions" },
   ];
 
   const tableData = searchResults.map((article) => ({

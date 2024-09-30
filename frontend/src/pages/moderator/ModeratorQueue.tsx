@@ -32,20 +32,52 @@ const ModeratorQueue: NextPage<ArticlesProps> = ({ articles }) => {
         ...article,
         authors: article.authors,
         actions: (
-            <Link href={`/moderator/${article.id}`} passHref>
-                <button
-                    style={{
-                        cursor: 'pointer',
-                        padding: '0.5em 1em',
-                        backgroundColor: '#4CAF50',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                    }}
-                >
-                    Review
-                </button>
-            </Link>
+            <>
+                <Link href={`/moderator/${article.id}`} passHref>
+                    <button
+                        style={{
+                            cursor: 'pointer',
+                            padding: '0.5em 1em',
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            marginRight: '10px'
+                        }}
+                    >
+                        Review
+                    </button>
+                </Link>
+                <Link href={`/moderator/${article.id}`} passHref>
+                    <button
+                        style={{
+                            cursor: 'pointer',
+                            padding: '0.5em 1em',
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            marginRight: '10px'
+                        }}
+                    >
+                        Pass
+                    </button>
+                </Link>
+                <Link href={`/moderator/${article.id}`} passHref>
+                    <button
+                        style={{
+                            cursor: 'pointer',
+                            padding: '0.5em 1em',
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                        }}
+                    >
+                        Reject
+                    </button>
+                </Link>
+            </>
         ),
     }));
 
