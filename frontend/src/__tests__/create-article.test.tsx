@@ -85,7 +85,7 @@ describe('CreateArticle Component', () => {
         // Wait for the asynchronous actions to complete
         await waitFor(() => {
             expect(mockedAxios.post).toHaveBeenCalledWith(
-                'http://localhost:8000/api/articles',
+                process.env.ACCESS_URL + `/api/articles`,
                 expect.objectContaining({
                     title: 'Test Article Title',
                     authors: ['Author Name'],

@@ -33,7 +33,7 @@ const ArticleDetails: React.FC = () => {
         if (id) {
             const fetchArticle = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8000/api/articles/${id}`);
+                    const response = await axios.get(process.env.ACCESS_URL + `/api/articles/${id}`);
                     setArticle(response.data);
                     setEvidence(response.data.evidence || '');
                 } catch (error) {
@@ -50,7 +50,7 @@ const ArticleDetails: React.FC = () => {
         if (!article) return;
 
         try {
-            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/evidence`, {
+            await axios.post(process.env.ACCESS_URL + `/api/analysis/articles/${article._id}/evidence`, {
                 evidence,
             });
             setMessage('Evidence updated successfully.');
@@ -64,7 +64,7 @@ const ArticleDetails: React.FC = () => {
         if (!article) return;
 
         try {
-            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/approve`);
+            await axios.post(process.env.ACCESS_URL + `/api/analysis/articles/${article._id}/approve`);
             setMessage('Article approved and published.');
             // Optionally, redirect back to the dashboard
             router.push('/analyst-dashboard');
@@ -78,7 +78,7 @@ const ArticleDetails: React.FC = () => {
         if (!article) return;
 
         try {
-            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/reject`);
+            await axios.post(process.env.ACCESS_URL + `/api/analysis/articles/${article._id}/reject`);
             setMessage('Article rejected.');
             // Optionally, redirect back to the dashboard
             router.push('/analyst-dashboard');

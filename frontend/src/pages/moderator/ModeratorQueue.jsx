@@ -13,7 +13,7 @@ const ModeratorQueue = () => {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/moderation/moderationQueue');
+                const response = await axios.get(process.env.ACCESS_URL + `/api/moderation/moderationQueue`);
                 setArticles(response.data);
             } catch (error) {
                 console.error('Error fetching articles for moderation:', error);

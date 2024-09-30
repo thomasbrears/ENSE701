@@ -71,7 +71,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
 
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await axios.get("http://localhost:8000/api/articles/published");
+  const response = await axios.get(process.env.ACCESS_URL + `/api/articles/published`);
   const articles = response.data;
 
   const paths = articles.map((article: any) => ({
@@ -86,7 +86,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ params }) => {
   try {
-    const response = await axios.get(`http://localhost:8000/api/articles/${params?.id}`);
+    const response = await axios.get(process.env.ACCESS_URL + `/api/articles/${params?.id}`);
     const article = response.data;
 
     // Log the article data to see what is being retrieved
