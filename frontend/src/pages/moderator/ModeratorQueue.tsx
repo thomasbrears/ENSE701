@@ -3,43 +3,36 @@ import axios from 'axios';
 import Link from 'next/link';
 import SortableTable from '@/components/SortableTable';
 
-interface ArticlesInterface {
-    id: string;
+interface Article {
+    _id: string;
     title: string;
-    authors: string;
-    pubyear: string;
+    authors: string[];
+    summary: string;
+    publication_year: number;
+    research_type: string | null;
+    se_practice: string | null;
     journal: string;
-    se_practice: string;
-    research_type: string;
+    status: string;
+    evidence: string;
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://ense701-g6.vercel.app/api'
-  : 'http://localhost:8000/api';
+    ? 'https://ense701-g6.vercel.app/api'
+    : 'http://localhost:8000/api';
 
 const ModeratorQueue: React.FC = () => {
-    const [articles, setArticles] = useState<ArticlesInterface[]>([]);
+    const [articles, setArticles] = useState<Article[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await axios.get(`${API_URL}/moderation/articles`);
-                const formattedArticles = response.data.map((article: any) => ({
-                    id: article._id,
-                    title: article.title,
-                    authors: Array.isArray(article.authors) ? article.authors.join(", ") : article.authors,
-                    pubyear: article.publication_year?.toString() ?? "",
-                    journal: article.journal ?? "",
-                    se_practice: article.se_practice ?? "",
-                    research_type: article.research_type ?? "",
-                }));
-
-                setArticles(formattedArticles);
+                const response = await axios.get(`${API_URL}/moderation/articles/`);
+                setArticles(response.data);
             } catch (error) {
-                console.error('Error fetching articles for moderation:', error);
-                setError('Failed to load articles for moderation.');
+                console.error('Error fetching articles for analysis:', error);
+                setError('Error fetching articles for analysis.');
             } finally {
                 setIsLoading(false);
             }
@@ -51,8 +44,11 @@ const ModeratorQueue: React.FC = () => {
     const headers = [
         { key: "title", label: "Title" },
         { key: "authors", label: "Authors" },
-        { key: "pubyear", label: "Publication Year" },
-        { key: 'actions', label: 'Actions' },
+        { key: "publication_year", label: "Publication Year" },
+        { key: "journal", label: "Journal/Conference" },
+        { key: "se_practice", label: "SE Practice" },
+        { key: "research_type", label: "Research Type" },
+        { key: 'actions', label: '' },
     ];
 
     const tableData = articles.map((article) => ({
@@ -60,7 +56,7 @@ const ModeratorQueue: React.FC = () => {
         authors: article.authors,
         actions: (
             <>
-                <Link href={`/moderator/${article.id}`} passHref>
+                <Link href={`/moderator/${article._id}`} passHref>
                     <button
                         style={{
                             cursor: 'pointer',
@@ -75,7 +71,7 @@ const ModeratorQueue: React.FC = () => {
                         Review
                     </button>
                 </Link>
-                <Link href={`/moderator/${article.id}`} passHref>
+                <Link href={`/moderator/${article._id}`} passHref>
                     <button
                         style={{
                             cursor: 'pointer',
@@ -90,7 +86,7 @@ const ModeratorQueue: React.FC = () => {
                         Pass
                     </button>
                 </Link>
-                <Link href={`/moderator/${article.id}`} passHref>
+                <Link href={`/moderator/${article._id}`} passHref>
                     <button
                         style={{
                             cursor: 'pointer',
