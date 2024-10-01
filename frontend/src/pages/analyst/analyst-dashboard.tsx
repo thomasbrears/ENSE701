@@ -44,7 +44,7 @@ const AnalystDashboard: React.FC = () => {
     { key: "journal", label: "Journal/Conference" },
     { key: "se_practice", label: "SE Practice" },
     { key: "research_type", label: "Research Type" },
-    { key: 'actions', label: 'Actions' },
+    { key: 'actions', label: '' },
   ];
 
   const tableData = articles.map((article) => ({
