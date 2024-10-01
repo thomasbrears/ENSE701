@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div>
       <h1>Welcome to SPEED</h1>
-      <p>This is the home page content...</p>
+      <p>Welcome to the SPEED web application.. Use the navigation bar to navigate around the website to view articles or submit a new one</p>
     </div>
   );
 };

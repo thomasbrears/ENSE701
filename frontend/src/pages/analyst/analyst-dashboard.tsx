@@ -16,6 +16,10 @@ interface Article {
   evidence: string;
 }
 
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://ense701-backend.vercel.app/api'
+  : 'http://localhost:8000/api';
+
 const AnalystDashboard: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -24,7 +28,7 @@ const AnalystDashboard: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/analysis/articles/`);
+        const response = await axios.get(`${API_URL}/analysis/articles/`);
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles for analysis:', error);

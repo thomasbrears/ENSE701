@@ -22,35 +22,40 @@ interface ArticleDetailsProps {
     evidence: string | null;
     summary: string;
   };
-  baseURL: string;
 }
 
-const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => {
+const API_URL = process.env.NODE_ENV === 'production'
+  ? process.env.NEXT_PUBLIC_API_URL // Use environment variable in production
+  : 'http://localhost:8000/api';
+
+const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
   const router = useRouter();
 
   const [rating, setRating] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
 
   useEffect(() => {
-    // Fetch the average score when the component is mounted
-    async function fetchAverageScore() {
-      try {
-        const averageScore = await getAverageScore(article.id);
-        setScore(averageScore);
-      } catch (error) {
-        console.error("Error fetching average score:", error);
-      }
-    }
+    if (article) {
+      // Fetch the average score when the component is mounted
+      const fetchAverageScore = async () => {
+        try {
+          const averageScore = await getAverageScore(article.id);
+          setScore(averageScore);
+        } catch (error) {
+          console.error("Error fetching average score:", error);
+        }
+      };
 
-    fetchAverageScore();
-  }, [article.id]); // Fetch average score whenever the article ID changes
+      fetchAverageScore();
+    }
+  }, [article?.id]); // Fetch average score whenever the article ID changes
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Display loading indicator during fallback
   }
 
   async function getAverageScore(id: string) {
-    const result = await axios.get(baseURL + `/api/scores/average/${id}`);
+    const result = await axios.get(`${API_URL}/scores/average/${id}`);
     const average_score: number = result.data.average_score || 0;
     return average_score;
   }
@@ -61,7 +66,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
 
   async function handleSubmitRating() {
     try {
-      const result = await axios.post(baseURL + `/api/scores/`, {
+      const result = await axios.post(`${API_URL}/scores/`, {
         doc_id: article.id,
         average_score: rating
       });
@@ -135,22 +140,30 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await axios.get(process.env.ACCESS_URL + `/api/articles/published`);
-  const articles = response.data;
+  try {
+    const response = await axios.get(`${API_URL}/articles/published`);
+    const articles = response.data;
 
-  const paths = articles.map((article: any) => ({
-    params: { id: article._id },
-  }));
+    const paths = articles.map((article: any) => ({
+      params: { id: article._id },
+    }));
 
-  return {
-    paths,
-    fallback: true, // Enable fallback pages
-  };
+    return {
+      paths,
+      fallback: true, // Enable fallback pages
+    };
+  } catch (error) {
+    console.error("Error fetching paths:", error);
+    return {
+      paths: [],
+      fallback: true, // Still enable fallback for other dynamic routes
+    };
+  }
 };
 
 export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ params }) => {
   try {
-    const response = await axios.get(process.env.ACCESS_URL + `/api/articles/${params?.id}`);
+    const response = await axios.get(`${API_URL}/articles/${params?.id}`);
     const article = response.data;
 
     // Log the article data to see what is being retrieved
@@ -158,7 +171,6 @@ export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ para
 
     return {
       props: {
-        baseURL: process.env.ACCESS_URL || "",
         article: {
           id: article._id,
           title: article.title || "No title available",
@@ -176,6 +188,7 @@ export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ para
           summary: article.summary || "No summary available",
         },
       },
+      revalidate: 60, // Revalidate the page every 60 seconds
     };
   } catch (error) {
     console.error("Error fetching article details:", error);

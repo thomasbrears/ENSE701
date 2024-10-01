@@ -19,6 +19,10 @@ type ArticlesProps = {
   articles: ArticlesInterface[];
 };
 
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://ense701-backend.vercel.app/api'
+  : 'http://localhost:8000/api';
+
 const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
   const [searchResults, setSearchResults] = useState<ArticlesInterface[]>(articles);
 
@@ -89,7 +93,7 @@ const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
   try {
-    const response = await axios.get(process.env.ACCESS_URL + `/api/articles/published`);
+    const response = await axios.get(`${API_URL}/articles/published`);
     const articles = response.data.map((article: any) => ({
       id: article._id,
       title: article.title,

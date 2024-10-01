@@ -2,6 +2,10 @@ import { FormEvent, useState } from "react";
 import axios from "axios";
 import formStyles from "../../styles/Forms.module.scss";
 
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://ense701-backend.vercel.app/api'
+  : 'http://localhost:8000/api';
+
 const NewDiscussion = () => {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState<string[]>([]);
@@ -36,7 +40,7 @@ const NewDiscussion = () => {
       };
 
       console.log("Submitting article with data:", articleData);
-      const response = await axios.post(process.env.ACCESS_URL + `/api/articles`, articleData);
+      const response = await axios.post(`${API_URL}/articles`, articleData);
 
       if (response.status === 201) {
         alert("Article submitted successfully!");
