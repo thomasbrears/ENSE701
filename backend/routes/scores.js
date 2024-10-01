@@ -46,7 +46,7 @@ router.get("/average/:id", async (req, res) => {
             return res.status(200).json({ doc_id: req.params.id, average_score: 0 });
         }
 
-        const averageScore = scores.reduce((total, score) => total + score.average_score, 0) / scores.length;
+        const averageScore = Number((scores.reduce((total, score) => total + score.average_score, 0) / scores.length).toPrecision(3));
         return res.status(200).json({ doc_id: req.params.id, average_score: averageScore });
     } catch (error) {
         console.error('Error retrieving average score by ID:', error);
