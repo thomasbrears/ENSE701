@@ -1,9 +1,8 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
-import ModeratorQueue, { getStaticProps } from '@/pages/moderator/ModeratorQueue';
+import { render, screen, within, waitFor } from '@testing-library/react';
+import ModeratorQueue from '@/pages/moderator/ModeratorQueue';
 import '@testing-library/jest-dom';
 import axios from 'axios';
-import { GetStaticPropsContext } from 'next';
 
 // Mock Next.js Link component
 jest.mock('next/link', () => {
@@ -47,7 +46,7 @@ describe('ModeratorQueue Component', () => {
         jest.clearAllMocks();
     });
 
-    test('renders a list of articles within the SortableTable when articles are provided', () => {
+    test('renders a list of articles within the SortableTable when articles are provided', async () => {
         const mockArticles = [
             {
                 id: '1',
@@ -69,11 +68,18 @@ describe('ModeratorQueue Component', () => {
             },
         ];
 
-        render(<ModeratorQueue articles={mockArticles} />);
+        mockedAxios.get.mockResolvedValueOnce({ data: mockArticles });
 
-        // Check for the table
-        const table = screen.getByTestId('sortable-table');
-        expect(table).toBeInTheDocument();
+        render(<ModeratorQueue />);
+
+        // Check for loading state
+        expect(screen.getByText('Loading articles...')).toBeInTheDocument();
+
+        // Wait for the articles to be loaded
+        await waitFor(() => {
+            const table = screen.getByTestId('sortable-table');
+            expect(table).toBeInTheDocument();
+        });
 
         // Check table headers
         expect(screen.getByText('Title')).toBeInTheDocument();
@@ -98,18 +104,22 @@ describe('ModeratorQueue Component', () => {
         expect(rejectButtons.length).toBe(mockArticles.length);
     });
 
-    test('renders "No articles in the moderation queue." when there are no articles', () => {
-        render(<ModeratorQueue articles={[]} />);
+    test('renders "No articles in the moderation queue." when there are no articles', async () => {
+        mockedAxios.get.mockResolvedValueOnce({ data: [] });
 
-        // Check for the message
-        expect(screen.getByText('No articles in the moderation queue.')).toBeInTheDocument();
+        render(<ModeratorQueue />);
+
+        // Wait for the articles to be loaded
+        await waitFor(() => {
+            expect(screen.getByText('No articles in the moderation queue.')).toBeInTheDocument();
+        });
 
         // Ensure the SortableTable is not rendered
         const table = screen.queryByTestId('sortable-table');
         expect(table).not.toBeInTheDocument();
     });
 
-    test('handles articles with empty authors field gracefully', () => {
+    test('handles articles with empty authors field gracefully', async () => {
         const mockArticles = [
             {
                 id: '3',
@@ -122,11 +132,15 @@ describe('ModeratorQueue Component', () => {
             },
         ];
 
-        render(<ModeratorQueue articles={mockArticles} />);
+        mockedAxios.get.mockResolvedValueOnce({ data: mockArticles });
 
-        // Check for the table
-        const table = screen.getByTestId('sortable-table');
-        expect(table).toBeInTheDocument();
+        render(<ModeratorQueue />);
+
+        // Wait for the articles to be loaded
+        await waitFor(() => {
+            const table = screen.getByTestId('sortable-table');
+            expect(table).toBeInTheDocument();
+        });
 
         // Get all rows
         const rows = screen.getAllByRole('row');
