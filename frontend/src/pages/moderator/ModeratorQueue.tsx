@@ -4,7 +4,6 @@ import axios from 'axios';
 import Link from 'next/link';
 import SortableTable from '@/components/SortableTable';
 
-//I stole ur UX formatting whoever did analyst, Thank you, it looked good :)
 interface ArticlesInterface {
     id: string;
     title: string;
@@ -14,6 +13,10 @@ interface ArticlesInterface {
     se_practice: string;
     research_type: string;
 }
+
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://ense701-backend.vercel.app/api'
+  : 'http://localhost:8000/api';
 
 type ArticlesProps = {
     articles: ArticlesInterface[];
@@ -97,7 +100,7 @@ const ModeratorQueue: NextPage<ArticlesProps> = ({ articles }) => {
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (context: GetStaticPropsContext) => {
     try {
-        const response = await axios.get(process.env.ACCESS_URL + `/api/moderation/moderationQueue`);
+        const response = await axios.get(`${API_URL}/moderation/moderationQueue`);
         const articles = response.data.map((article: any) => ({
             id: article._id,
             title: article.title,
