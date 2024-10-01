@@ -1,9 +1,9 @@
+
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useRouter } from "next/router";
 import styles from "../../styles/ArticleDetails.module.scss";
-import Rating from "@/components/Rating";
 
 interface ArticleDetailsProps {
   article: {
@@ -31,54 +31,14 @@ const API_URL = process.env.NODE_ENV === 'production'
 const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
   const router = useRouter();
 
-  const [rating, setRating] = useState<number>(0);
-  const [score, setScore] = useState<number>(0);
-
-  useEffect(() => {
-    // Fetch average score when the article changes
-    if (article.id) {
-      const fetchAverageScore = async () => {
-        const result = await getAverageScore(article.id);
-        setScore(result);
-      };
-      fetchAverageScore();
-    }
-  }, [article.id]);
-
   if (router.isFallback) {
-    return <div>Loading...</div>; // Handle fallback state
-  }
-
-  async function getAverageScore(id: string) {
-    const result = await axios.get(`${API_URL}/scores/average/${id}`);
-    const average_score: number = result.data.average_score || 0;
-    return average_score;
-  }
-
-  function handleRatingChange(rating: number) {
-    setRating(rating);
-  }
-
-  async function handleSubmitRating() {
-    try {
-      const result = await axios.post(`${API_URL}/scores/`, {
-        doc_id: article.id,
-        average_score: rating,
-      });
-
-      if (result.status === 201) {
-        const newAverageScore = await getAverageScore(article.id);
-        setScore(newAverageScore);
-      }
-    } catch (error) {
-      console.error("Error submitting article:", error);
-      alert("Failed to submit the score. Please try again.");
-    }
+    return <div>Loading...</div>; // Display loading indicator during fallback
   }
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{article.title}</h1>
+
       <div className={styles.divider}></div>
       <div className={styles.subtitle}>
         <b>{article.journal}</b>
@@ -92,6 +52,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
         Type of Research: <b>{article.research_type}</b>
         <br />
         Software Engineering Practice: <b>{article.se_practice}</b>
+        <br />
       </div>
 
       <div className={styles.section}>
@@ -112,13 +73,19 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
           <p className={styles.text}>{article.evidence}</p>
         </div>
       )}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: '30px'
+      }}>
+      </div>
     </div>
   );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/articles/published`);
+    const response = await axios.get(`${API_URL}/articles/published`);
     const articles = response.data;
 
     const paths = articles.map((article: any) => ({
@@ -127,25 +94,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
       paths,
-      fallback: 'blocking', // Use fallback blocking for better UX
+      fallback: true, // Enable fallback pages
     };
   } catch (error) {
     console.error("Error fetching paths:", error);
     return {
       paths: [],
-      fallback: 'blocking', // Ensure pages are built on demand if data is missing
+      fallback: true, // Still enable fallback for other dynamic routes
     };
   }
 };
 
 export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ params }) => {
   try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/articles/${params?.id}`);
+    const response = await axios.get(`${API_URL}/articles/${params?.id}`);
     const article = response.data;
-
-    if (!article) {
-      return { notFound: true }; // Return 404 if no article is found
-    }
 
     return {
       props: {
@@ -171,7 +134,7 @@ export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ para
   } catch (error) {
     console.error("Error fetching article details:", error);
     return {
-      notFound: true, // Return 404 if an error occurs
+      notFound: true, // Return 404 if article is not found
     };
   }
 };
