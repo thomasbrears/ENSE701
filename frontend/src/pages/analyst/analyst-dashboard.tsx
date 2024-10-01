@@ -24,7 +24,7 @@ const AnalystDashboard: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/analysis/articles');
+        const response = await axios.get(process.env.ACCESS_URL + `/api/analysis/articles`);
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles for analysis:', error);
