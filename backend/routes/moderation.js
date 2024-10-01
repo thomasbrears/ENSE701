@@ -1,19 +1,53 @@
 import express from 'express';
-import ModeratorArticle from '../models/ModeratorArticle.js';
+import Article from '../models/Article.js';
 
 const router = express.Router();
 
-// route to get moderation queue
-router.get('/moderationQueue', async (req, res) => {
+// GET /api/analyses/approved_by_moderator - Retrieve all articles approced by moderator
+router.get('/articles', async (req, res) => {
+  try {
+    const moderationQueue = await Article.find({ status: 'pending' });
+    res.status(200).json(moderationQueue);
+  } catch (error) {
+    console.error('Error retrieving approved analyses:', error);
+    res.status(500).json({ message: 'Error fetching approved analyses', error });
+  }
+});
+
+router.post('/articles/:id/approve', async (req, res) => {
+    const articleId = req.params.id;
+
     try {
-        //fetching articles which status = pending
-        const articles = await ModeratorArticle.find({ status: 'pending' });
-        //Json return
-        res.json(articles);
+        const article = await Article.findByIdAndUpdate(
+            articleId,
+            { status: 'approved_by_moderator' },
+            { new: true }
+        );
+        if (!article) return res.status(404).json({ message: 'Article not found' });
+
+        res.status(200).json({message: 'Article approved and sent to Analyst', article});
     } catch (error) {
-        //error handling and error output
-        res.status(500).json({ message: 'Error fetching articles' });
+        console.error('Error approving the article:', error);
+        res.status(500).json({ message: 'Error approving the article', error });
     }
 });
+
+router.post('/articles/:id/reject', async (req, res) => {
+    const articleId = req.params.id;
+
+    try {
+        const article = await Article.findByIdAndUpdate(
+            articleId,
+            { status: 'rejected' },
+            { new: true }
+        );
+        if (!article) return res.status(404).json({ message: 'Article not found' });
+
+        res.status(200).json({message: 'Article rejected', article});
+    } catch (error) {
+        console.error('Error rejecting the article:', error);
+        res.status(500).json({ message: 'Error rejecting the article', error });
+    }
+    });
 
 export default router;

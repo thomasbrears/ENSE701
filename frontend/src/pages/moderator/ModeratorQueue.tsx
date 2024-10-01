@@ -25,7 +25,7 @@ const ModeratorQueue: React.FC = () => {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await axios.get(`${API_URL}/moderation/moderationQueue`);
+                const response = await axios.get(`${API_URL}/moderation/articles`);
                 const formattedArticles = response.data.map((article: any) => ({
                     id: article._id,
                     title: article.title,
