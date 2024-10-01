@@ -67,4 +67,17 @@ router.post('/articles/:id/reject', async (req, res) => {
     }
     });
 
+    // GET /api/articles/:id - Retrieve a single article by ID
+router.get('/:id', async (req, res) => {
+    console.log(`"GET /api/articles/${req.params.id} - Retrieve a single article by ID"`)
+    try {
+      const article = await Article.findById(req.params.id);
+      if (!article) return res.status(404).json({ message: 'Article not found' });
+      res.status(200).json(article);
+    } catch (error) {
+      console.error('Error retrieving that article:', error);
+      res.status(500).json({ message: 'Error fetching article', error });
+    }
+  });
+
     export default router;

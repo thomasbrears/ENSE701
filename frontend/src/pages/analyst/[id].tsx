@@ -35,7 +35,7 @@ const ArticleDetails: React.FC = () => {
         if (id) {
             const fetchArticle = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8000/api/articles/${id}`);
+                    const response = await axios.get(`http://localhost:8000/api/articles/:${id}`);
                     setArticle(response.data);
                     setEvidence(response.data.evidence || ''); // Initialize evidence state
                 } catch (error) {
@@ -55,14 +55,14 @@ const ArticleDetails: React.FC = () => {
         if (!article) return;
         try {
             // Save the updated evidence
-            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/evidence`, {
+            await axios.post(`http://localhost:8000/api/articles/${id}/evidence`, {
                 evidence,
             });
             setMessage('Evidence updated successfully.');
             setIsEditing(false); // Exit edit mode after saving
 
             // Re-fetch the updated article to get the latest evidence
-            const response = await axios.get(`http://localhost:8000/api/articles/${article._id}`);
+            const response = await axios.get(`/api/articles/${article._id}`);
             setArticle(response.data); // Update the article data with the new evidence
 
         } catch (error) {
@@ -74,7 +74,7 @@ const ArticleDetails: React.FC = () => {
     const handleApprove = async () => {
         if (!article) return;
         try {
-            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/approve`);
+            await axios.post(`http://localhost:8000/api/articles/${id}/approve`);
             setMessage('Article approved and published.');
             router.back();
         } catch (error) {
@@ -86,7 +86,7 @@ const ArticleDetails: React.FC = () => {
     const handleReject = async () => {
         if (!article) return;
         try {
-            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/reject`);
+            await axios.post(`http://localhost:8000/api/articles/${id}/reject`);
             setMessage('Article rejected.');
             router.back();
         } catch (error) {

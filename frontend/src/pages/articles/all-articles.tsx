@@ -89,7 +89,7 @@ const AllArticles: NextPage<ArticlesProps> = ({ articles }) => {
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
   try {
-    const response = await axios.get(process.env.ACCESS_URL + `/api/articles/published`);
+    const response = await axios.get("http://localhost:8000/api/articles/published");
     const articles = response.data.map((article: any) => ({
       id: article._id,
       title: article.title,

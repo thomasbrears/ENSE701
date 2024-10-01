@@ -24,7 +24,7 @@ const AnalystDashboard: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/analysis/articles/`);
+        const response = await axios.get(`http://localhost:8000/api/analysis/articles`);
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles for analysis:', error);
@@ -44,7 +44,7 @@ const AnalystDashboard: React.FC = () => {
     { key: "journal", label: "Journal/Conference" },
     { key: "se_practice", label: "SE Practice" },
     { key: "research_type", label: "Research Type" },
-    { key: 'actions', label: '' },
+    { key: 'actions', label: 'Action' },
   ];
 
   const tableData = articles.map((article) => ({
