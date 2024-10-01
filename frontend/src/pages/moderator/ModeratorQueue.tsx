@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import axios from 'axios';
 import Link from 'next/link';
 import SortableTable from '@/components/SortableTable';
@@ -18,11 +17,36 @@ const API_URL = process.env.NODE_ENV === 'production'
   ? 'https://ense701-g6.vercel.app/api'
   : 'http://localhost:8000/api';
 
-type ArticlesProps = {
-    articles: ArticlesInterface[];
-};
+const ModeratorQueue: React.FC = () => {
+    const [articles, setArticles] = useState<ArticlesInterface[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-const ModeratorQueue: NextPage<ArticlesProps> = ({ articles }) => {
+    useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/moderation/moderationQueue`);
+                const formattedArticles = response.data.map((article: any) => ({
+                    id: article._id,
+                    title: article.title,
+                    authors: Array.isArray(article.authors) ? article.authors.join(", ") : article.authors,
+                    pubyear: article.publication_year?.toString() ?? "",
+                    journal: article.journal ?? "",
+                    se_practice: article.se_practice ?? "",
+                    research_type: article.research_type ?? "",
+                }));
+
+                setArticles(formattedArticles);
+            } catch (error) {
+                console.error('Error fetching articles for moderation:', error);
+                setError('Failed to load articles for moderation.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchArticles();
+    }, []);
 
     const headers = [
         { key: "title", label: "Title" },
@@ -87,7 +111,11 @@ const ModeratorQueue: NextPage<ArticlesProps> = ({ articles }) => {
     return (
         <div className="container">
             <h1>Moderator Queue</h1>
-            {articles.length > 0 ? (
+            {isLoading ? (
+                <p>Loading articles...</p>
+            ) : error ? (
+                <p>{error}</p>
+            ) : articles.length > 0 ? (
                 <SortableTable headers={headers} data={tableData} />
             ) : (
                 <p>No articles in the moderation queue.</p>
@@ -95,38 +123,5 @@ const ModeratorQueue: NextPage<ArticlesProps> = ({ articles }) => {
         </div>
     );
 };
-
-
-
-export const getStaticProps: GetStaticProps<ArticlesProps> = async (context: GetStaticPropsContext) => {
-    try {
-        const response = await axios.get(`${API_URL}/moderation/moderationQueue`);
-        const articles = response.data.map((article: any) => ({
-            id: article._id,
-            title: article.title,
-            authors: Array.isArray(article.authors) ? article.authors.join(", ") : article.authors,
-            pubyear: article.publication_year?.toString() ?? "",
-            journal: article.journal ?? "",
-            se_practice: article.se_practice ?? "",
-            research_type: article.research_type ?? "",
-            summary: article.summary ?? "",
-        }));
-
-        return {
-            props: {
-                articles,
-            },
-            revalidate: 60, // Optional: Regenerate the page every 60 seconds
-        };
-    } catch (error) {
-        console.error('Error fetching articles for moderation:', error);
-        return {
-            props: {
-                articles: [],
-            },
-        };
-    }
-};
-
 
 export default ModeratorQueue;
