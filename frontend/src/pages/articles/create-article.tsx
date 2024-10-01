@@ -3,7 +3,7 @@ import axios from "axios";
 import formStyles from "../../styles/Forms.module.scss";
 
 const API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://ense701-backend.vercel.app/api'
+  ? 'https://ense701-g6.vercel.app/api'
   : 'http://localhost:8000/api';
 
 const NewDiscussion = () => {

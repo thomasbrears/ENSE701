@@ -25,7 +25,7 @@ interface ArticleDetailsProps {
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://ense701-backend.vercel.app/api'
+  ? 'https://ense701-g6.vercel.app/api'
   : 'http://localhost:8000/api';
 
 const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
