@@ -14,6 +14,19 @@ router.get('/published', async (req, res) => {
   }
 });
 
+// GET /api/articles/:id - Retrieve a single article by ID
+router.get('/:id', async (req, res) => {
+  console.log(`"GET /api/articles/${req.params.id} - Retrieve a single article by ID"`)
+  try {
+    const article = await Article.findById(req.params.id);
+    if (!article) return res.status(404).json({ message: 'Article not found' });
+    res.status(200).json(article);
+  } catch (error) {
+    console.error('Error retrieving that article:', error);
+    res.status(500).json({ message: 'Error fetching article', error });
+  }
+});
+
 // POST /api/articles - Create a new article
 router.post('/', async (req, res) => {
   console.log("POST /api/articles - Create a new article")
@@ -43,19 +56,6 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error saving the article:', error);
     res.status(500).json({ message: 'Error saving the article', error });
-  }
-});
-
-// GET /api/articles/:id - Retrieve a single article by ID
-router.get('/:id', async (req, res) => {
-  console.log(`"GET /api/articles/${req.params.id} - Retrieve a single article by ID"`)
-  try {
-    const article = await Article.findById(req.params.id);
-    if (!article) return res.status(404).json({ message: 'Article not found' });
-    res.status(200).json(article);
-  } catch (error) {
-    console.error('Error retrieving that article:', error);
-    res.status(500).json({ message: 'Error fetching article', error });
   }
 });
 
