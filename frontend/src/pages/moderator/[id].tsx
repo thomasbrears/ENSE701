@@ -98,6 +98,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
           <p className={styles.text}>{article.evidence}</p>
         </div>
       )}
+
       <div style={{
         display: 'flex',
         alignItems: 'center',
