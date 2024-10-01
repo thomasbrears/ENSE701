@@ -98,22 +98,6 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
           <p className={styles.text}>{article.evidence}</p>
         </div>
       )}
-
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginTop: '30px'
-      }}>
-        Please grade the article:
-        <Rating onChange={handleRatingChange}></Rating>
-        <button style={{
-          marginLeft: '10px'
-        }} onClick={handleSubmitRating}>Submit Rating</button>
-        <div style={{
-          marginLeft: '10px'
-        }}>Average score of articles: <span style={{ color: 'red' }}>{score}</span></div>
-      </div>
-
     </div>
   );
 };
