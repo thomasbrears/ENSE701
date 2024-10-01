@@ -36,7 +36,6 @@ const NewDiscussion = () => {
       };
 
       console.log("Submitting article with data:", articleData);
-
       const response = await axios.post(process.env.ACCESS_URL + `/api/articles`, articleData);
 
       if (response.status === 201) {
