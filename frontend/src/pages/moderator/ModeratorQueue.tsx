@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GetStaticProps, NextPage } from "next";
+import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import axios from 'axios';
 import Link from 'next/link';
 import SortableTable from '@/components/SortableTable';
@@ -95,7 +95,7 @@ const ModeratorQueue: NextPage<ArticlesProps> = ({ articles }) => {
 
 
 
-export const getStaticProps: GetStaticProps<ArticlesProps> = async () => {
+export const getStaticProps: GetStaticProps<ArticlesProps> = async (context: GetStaticPropsContext) => {
     try {
         const response = await axios.get(process.env.ACCESS_URL + `/api/moderation/moderationQueue`);
         const articles = response.data.map((article: any) => ({
