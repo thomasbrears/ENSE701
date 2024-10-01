@@ -34,7 +34,7 @@ declare global {
   }
 }
 
-Cypress.Commands.add("mount", mount);
+//Cypress.Commands.add("mount", mount);
 
 // Example use:
 // cy.mount(<MyComponent />)
