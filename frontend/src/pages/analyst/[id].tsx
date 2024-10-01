@@ -25,35 +25,46 @@ const ArticleDetails: React.FC = () => {
     const router = useRouter();
     const { id } = router.query; // Get the article ID from the URL
     const [article, setArticle] = useState<Article | null>(null);
-    const [evidence, setEvidence] = useState<string>('');
-    const [message, setMessage] = useState<string>('');
-    const [error, setError] = useState<string | null>(null);
+    const [evidence, setEvidence] = useState<string>(''); // Evidence state
+    const [message, setMessage] = useState<string>(''); // Message state
+    const [error, setError] = useState<string | null>(null); // Error state
+    const [isEditing, setIsEditing] = useState(false); // Is editing state
 
+    // Fetch article details on component mount
     useEffect(() => {
         if (id) {
             const fetchArticle = async () => {
                 try {
-                    const response = await axios.get(process.env.ACCESS_URL + `/api/articles/${id}`);
+                    const response = await axios.get(`http://localhost:8000/api/articles/${id}`);
                     setArticle(response.data);
-                    setEvidence(response.data.evidence || '');
+                    setEvidence(response.data.evidence || ''); // Initialize evidence state
                 } catch (error) {
                     console.error('Error fetching article details:', error);
                     setError('Error fetching article details.');
                 }
             };
-
             fetchArticle();
         }
     }, [id]);
 
-    const handleEvidenceSubmit = async () => {
-        if (!article) return;
+    const handleEdit = () => {
+        setIsEditing(true); // Enter edit mode
+    };
 
+    const handleSaveEvidence = async () => {
+        if (!article) return;
         try {
-            await axios.post(process.env.ACCESS_URL + `/api/analysis/articles/${article._id}/evidence`, {
+            // Save the updated evidence
+            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/evidence`, {
                 evidence,
             });
             setMessage('Evidence updated successfully.');
+            setIsEditing(false); // Exit edit mode after saving
+
+            // Re-fetch the updated article to get the latest evidence
+            const response = await axios.get(`http://localhost:8000/api/articles/${article._id}`);
+            setArticle(response.data); // Update the article data with the new evidence
+
         } catch (error) {
             console.error('Error updating evidence:', error);
             setMessage('Error updating evidence.');
@@ -62,12 +73,10 @@ const ArticleDetails: React.FC = () => {
 
     const handleApprove = async () => {
         if (!article) return;
-
         try {
-            await axios.post(process.env.ACCESS_URL + `/api/analysis/articles/${article._id}/approve`);
+            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/approve`);
             setMessage('Article approved and published.');
-            // Optionally, redirect back to the dashboard
-            router.push('/analyst-dashboard');
+            router.back();
         } catch (error) {
             console.error('Error approving article:', error);
             setMessage('Error approving article.');
@@ -76,12 +85,10 @@ const ArticleDetails: React.FC = () => {
 
     const handleReject = async () => {
         if (!article) return;
-
         try {
-            await axios.post(process.env.ACCESS_URL + `/api/analysis/articles/${article._id}/reject`);
+            await axios.post(`http://localhost:8000/api/analysis/articles/${article._id}/reject`);
             setMessage('Article rejected.');
-            // Optionally, redirect back to the dashboard
-            router.push('/analyst-dashboard');
+            router.back();
         } catch (error) {
             console.error('Error rejecting article:', error);
             setMessage('Error rejecting article.');
@@ -119,37 +126,36 @@ const ArticleDetails: React.FC = () => {
                 <p className={styles.text}>{article.summary}</p>
             </div>
 
-            {article.claim && (
-                <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Claims</h2>
-                    <p className={styles.text}>{article.claim || 'No claim available'}</p>
-                </div>
+            <h2 className={styles.sectionTitle}>Claims</h2>
+            <p className={styles.text}>{article.claim || 'No claim available'}</p>
+
+            <h2 className={styles.sectionTitle}>Evidence of the Claims</h2>
+
+            {isEditing ? (
+                <textarea
+                    className={styles.input}
+                    value={evidence}
+                    onChange={(e) => setEvidence(e.target.value)}
+                    placeholder="Enter the evidence to support the claim"
+                    rows={5}
+                    cols={50}
+                ></textarea>
+            ) : (
+                <p className={styles.text} > {article.evidence || 'No Evidence available'}</p>
             )}
 
-            {article.evidence && (
-                <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Evidence of the Claims</h2>
-                    <p className={styles.text}>{article.evidence || 'No Evidence available'}</p>
-                </div>
+            {isEditing ? (
+                <button className={fromStyles.addButton} onClick={handleSaveEvidence}>Save Evidence</button>
+            ) : (
+                <button className={fromStyles.addButton} onClick={handleEdit}>Edit</button>
             )}
 
-            <h3>Add Evidence</h3>
-            <textarea className={fromStyles.input}
-                value={evidence}
-                onChange={(e) => setEvidence(e.target.value)}
-                placeholder='Enter the evidence to support the claim'
-                rows={5}
-                cols={50}
-            ></textarea>
-            <br />
-            <button className={fromStyles.addButton} onClick={handleEvidenceSubmit}>Save Evidence</button>
             <br />
             <button className={fromStyles.addButton} onClick={handleApprove}>Approve and Publish</button>
-            <button className={fromStyles.removeButton}
-                style={{margin: '1em'}}
-                onClick={handleReject}>Reject</button>
+            <button className={fromStyles.removeButton} style={{ margin: '1em' }} onClick={handleReject}>Reject</button>
             <br />
             <button className={fromStyles.addButton} onClick={() => router.back()}>Back to Dashboard</button>
+
             {message && <p>{message}</p>}
         </div>
     );

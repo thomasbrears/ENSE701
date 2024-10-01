@@ -65,6 +65,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{article.title}</h1>
+
       <div className={styles.divider}></div>
       <div className={styles.subtitle}>
         <b>{article.journal}</b>
@@ -78,6 +79,8 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
         Type of Research: <b>{article.research_type}</b>
         <br />
         Software Engineering Practice: <b>{article.se_practice}</b>
+        <br />
+        <h2>Average User Rating: <span style={{ color: 'red' }}>{score}</span></h2>
       </div>
 
       <div className={styles.section}>
@@ -103,14 +106,14 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
         alignItems: 'center',
         marginTop: '30px'
       }}>
-        Please grade the article:
+        Please rate this article:
         <Rating onChange={handleRatingChange}></Rating>
         <button style={{
           marginLeft: '10px'
         }} onClick={handleSubmitRating}>Submit Rating</button>
         <div style={{
           marginLeft: '10px'
-        }}>Average score of articles: <span style={{ color: 'red' }}>{score}</span></div>
+        }}></div>
       </div>
 
     </div>
