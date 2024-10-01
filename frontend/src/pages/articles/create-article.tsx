@@ -93,7 +93,7 @@ const NewDiscussion = () => {
                 onChange={(e) => updateAuthor(index, e.target.value)}
                 placeholder={`Author ${index + 1}`}
                 required
-                className={formStyles.input} 
+                className={formStyles.input}
               />
               <button type="button" onClick={() => removeAuthor(index)} className={formStyles.removeButton}>
                 Remove
@@ -114,7 +114,7 @@ const NewDiscussion = () => {
             onChange={(e) => setPubYear(e.target.value)}
             placeholder="e.g., 2021"
             required
-            className={formStyles.input} 
+            className={formStyles.input}
           />
         </div>
 
@@ -127,7 +127,7 @@ const NewDiscussion = () => {
             onChange={(e) => setJournal(e.target.value)}
             placeholder="Enter the journal or conference name"
             required
-            className={formStyles.input} 
+            className={formStyles.input}
           />
         </div>
 
@@ -140,7 +140,7 @@ const NewDiscussion = () => {
               value={volume}
               onChange={(e) => setVolume(e.target.value)}
               placeholder="e.g., 34"
-              className={`${formStyles.input} ${formStyles.shortTextField}`} 
+              className={`${formStyles.input} ${formStyles.shortTextField}`}
             />
           </div>
           <div className={formStyles.inlineItem}>
@@ -151,7 +151,7 @@ const NewDiscussion = () => {
               value={number}
               onChange={(e) => setNumber(e.target.value)}
               placeholder="e.g., 2"
-              className={`${formStyles.input} ${formStyles.shortTextField}`} 
+              className={`${formStyles.input} ${formStyles.shortTextField}`}
             />
           </div>
           <div className={formStyles.inlineItem}>
@@ -162,7 +162,7 @@ const NewDiscussion = () => {
               value={pages}
               onChange={(e) => setPages(e.target.value)}
               placeholder="e.g., 123-145"
-              className={`${formStyles.input} ${formStyles.shortTextField}`} 
+              className={`${formStyles.input} ${formStyles.shortTextField}`}
             />
           </div>
         </div>
@@ -175,7 +175,7 @@ const NewDiscussion = () => {
             value={doi}
             onChange={(e) => setDoi(e.target.value)}
             placeholder="Enter the DOI"
-            className={formStyles.input} 
+            className={formStyles.input}
           />
         </div>
 
@@ -200,7 +200,7 @@ const NewDiscussion = () => {
             onChange={(e) => setClaim(e.target.value)}
             placeholder="State the claim made in the article"
             required
-            className={`${formStyles.input} ${formStyles.longTextField}`} 
+            className={`${formStyles.input} ${formStyles.longTextField}`}
           />
         </div>
 
@@ -230,7 +230,7 @@ const NewDiscussion = () => {
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Provide a brief summary of the article"
             required
-            className={`${formStyles.input} ${formStyles.longTextField}`} 
+            className={`${formStyles.input} ${formStyles.longTextField}`}
           />
         </div>
 
