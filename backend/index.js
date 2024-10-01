@@ -18,6 +18,20 @@ app.use(express.json());
 // CORS middleware to allow cross-origin requests
 app.use(cors());
 
+// CORS middleware to allow requests from your frontend
+const allowedOrigins = ['https://ense701-frontend.vercel.app'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 // Use environment variable PORT, or default to 8000
 const PORT = process.env.PORT || 8000;
 
