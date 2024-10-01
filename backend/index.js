@@ -15,22 +15,28 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// CORS middleware to allow cross-origin requests
-app.use(cors());
+// CORS middleware to allow cross-origin requests (ORIGINAL - LOCAL)
+//app.use(cors());
 
-// CORS middleware to allow requests from your frontend
+// CORS configuration
 const allowedOrigins = ['https://ense701-frontend.vercel.app'];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
-}));
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //credentials: true, 
+  optionsSuccessStatus: 204, // For legacy browsers
+  allowedHeaders: 'Content-Type,Authorization', 
+};
+
+// Apply CORS with the options
+app.use(cors(corsOptions));
 
 // Use environment variable PORT, or default to 8000
 const PORT = process.env.PORT || 8000;
