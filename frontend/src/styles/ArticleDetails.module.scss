@@ -20,18 +20,13 @@
     width: 100%;
     margin: 0.5em 0 1em;
   }
-
   .subtitle {
-    font-size: 1em;
-    font-weight: 400;
-    background-color: #f0f0f0; // Light grey
-    box-shadow: 8px 8px rgba(0, 0, 0, .3);
-    border-radius: 10px;
-    color: #000; // Black
-    margin-bottom: 1em;
-    padding: 10px;
-    text-align: center;
-  }
+      font-size: 1em;
+      font-weight: 400;
+      color: #000; // Black
+      margin-bottom: 1em;
+      text-align: center;
+    }
 
   .section {
     margin-top: 1.5em;
@@ -49,11 +44,6 @@
     color: #555;
     line-height: 1.6;
     margin-bottom: 1em;
-    background-color: #f0f0f0; // Light grey
-    box-shadow: 10px 10px rgba(0, 0, 0, .3);
-    border-radius: 10px;
-    min-height: 100px;
-    padding: 20px;
     white-space: pre-wrap;
   }
 
