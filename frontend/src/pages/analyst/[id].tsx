@@ -22,7 +22,7 @@ interface Article {
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
-  ? process.env.NEXT_PUBLIC_API_URL // Use environment variable in production
+  ? 'https://ense701-backend.vercel.app/api'
   : 'http://localhost:8000/api';
 
 const ArticleDetails: React.FC = () => {

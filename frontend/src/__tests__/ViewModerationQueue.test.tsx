@@ -1,4 +1,3 @@
-// moderation-queue.test.tsx
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import ModeratorQueue, { getStaticProps } from '@/pages/moderator/ModeratorQueue';
@@ -8,35 +7,35 @@ import { GetStaticPropsContext } from 'next';
 
 // Mock Next.js Link component
 jest.mock('next/link', () => {
-    return ({ children }: { children: React.ReactNode }) => {
-        return <>{children}</>;
-    };
+    const MockLink = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+    MockLink.displayName = "MockLink"; // Add displayName
+    return MockLink;
 });
 
 // Mock SortableTable component
 jest.mock('@/components/SortableTable', () => {
-    return ({ headers, data }: { headers: any; data: any }) => {
-        return (
-            <table data-testid="sortable-table">
-                <thead>
-                    <tr>
+    const MockSortableTable = ({ headers, data }: { headers: any; data: any }) => (
+        <table data-testid="sortable-table">
+            <thead>
+                <tr>
+                    {headers.map((header: any) => (
+                        <th key={header.key}>{header.label}</th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {data.map((row: any) => (
+                    <tr key={row.id}>
                         {headers.map((header: any) => (
-                            <th key={header.key}>{header.label}</th>
+                            <td key={header.key}>{row[header.key]}</td>
                         ))}
                     </tr>
-                </thead>
-                <tbody>
-                    {data.map((row: any) => (
-                        <tr key={row.id}>
-                            {headers.map((header: any) => (
-                                <td key={header.key}>{row[header.key]}</td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        );
-    };
+                ))}
+            </tbody>
+        </table>
+    );
+    MockSortableTable.displayName = "MockSortableTable"; // Add displayName
+    return MockSortableTable;
 });
 
 // Mock axios

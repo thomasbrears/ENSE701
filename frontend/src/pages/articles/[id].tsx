@@ -25,7 +25,7 @@ interface ArticleDetailsProps {
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
-  ? process.env.NEXT_PUBLIC_API_URL // Use environment variable in production
+  ? 'https://ense701-backend.vercel.app/api'
   : 'http://localhost:8000/api';
 
 const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
@@ -35,8 +35,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
   const [score, setScore] = useState<number>(0);
 
   useEffect(() => {
-    if (article) {
-      // Fetch the average score when the component is mounted
+    if (article?.id) {
       const fetchAverageScore = async () => {
         try {
           const averageScore = await getAverageScore(article.id);
@@ -48,7 +47,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
 
       fetchAverageScore();
     }
-  }, [article?.id]); // Fetch average score whenever the article ID changes
+  }, [article?.id]); // Include 'article?.id' to avoid missing dependency warning
 
   if (router.isFallback) {
     return <div>Loading...</div>; // Display loading indicator during fallback
@@ -71,7 +70,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
         average_score: rating
       });
 
-      if (result.status == 201) {
+      if (result.status === 201) {
         const newAverageScore = await getAverageScore(article.id);
         setScore(newAverageScore);
       }
@@ -126,7 +125,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
         marginTop: '30px'
       }}>
         Please rate this article:
-        <Rating onChange={handleRatingChange}></Rating>
+        <Rating onChange={handleRatingChange} />
         <button style={{
           marginLeft: '10px'
         }} onClick={handleSubmitRating}>Submit Rating</button>
@@ -165,9 +164,6 @@ export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ para
   try {
     const response = await axios.get(`${API_URL}/articles/${params?.id}`);
     const article = response.data;
-
-    // Log the article data to see what is being retrieved
-    console.log("Fetched article data:", article);
 
     return {
       props: {
