@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useRouter } from "next/router";
 import styles from "../../styles/ArticleDetails.module.scss";
@@ -31,11 +31,25 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
   const [rating, setRating] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
 
+  useEffect(() => {
+    // Fetch the average score when the component is mounted
+    async function fetchAverageScore() {
+      try {
+        const averageScore = await getAverageScore(article.id);
+        setScore(averageScore);
+      } catch (error) {
+        console.error("Error fetching average score:", error);
+      }
+    }
+
+    fetchAverageScore();
+  }, [article.id]); // Fetch average score whenever the article ID changes
+
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  async function getAvagerScore(id: string) {
+  async function getAverageScore(id: string) {
     const result = await axios.get(baseURL + `/api/scores/average/${id}`);
     const average_score: number = result.data.average_score || 0;
     return average_score;
@@ -53,8 +67,8 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
       });
 
       if (result.status == 201) {
-        const result = await getAvagerScore(article.id);
-        setScore(result);
+        const newAverageScore = await getAverageScore(article.id);
+        setScore(newAverageScore);
       }
     } catch (error) {
       console.error("Error submitting article:", error);
@@ -119,7 +133,6 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article, baseURL }) => 
     </div>
   );
 };
-
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await axios.get(process.env.ACCESS_URL + `/api/articles/published`);
