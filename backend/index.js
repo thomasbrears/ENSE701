@@ -15,11 +15,15 @@ const app = express();
 // CORS middleware to allow cross-origin requests (ORIGINAL - LOCAL)
 //app.use(cors());
 
-// CORS middleware to allow cross-origin requests
-app.use(cors({
-  origin: 'https://ense701-frontend.vercel.app', 
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-}));
+// Apply CORS 
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors({
+    origin: 'http://localhost:3000', // Allow local frontend
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  }));
+} else {
+  // CORS will be handled by Vercel (vercel.json) during production
+}
 
 // Middleware to parse JSON bodies
 app.use(express.json());
