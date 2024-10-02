@@ -49,7 +49,7 @@ const NewDiscussion = () => {
 
       if (response.status === 201) {
         setSubmissionId(response.data.submissionId); // Store submission ID
-        
+
         // Display success message with the submission ID
         alert(`Article submitted successfully! Your submission ID is: ${response.data.submissionId}`);
 
@@ -292,7 +292,7 @@ const NewDiscussion = () => {
       {submissionId && (
         <div className={formStyles.submissionId}>
           <h3 style={{ textAlign:'left' }}>Article Submitted Successfully</h3>
-          <p>Thank you for submiting an article to the SPPED database! <br />
+          <p>Thank you for submiting an article to the SPEED database! <br />
           Your submission will now be reviewed by our team and you will be advised when it is published <br />
           Your article submission ID is <strong>{submissionId}</strong></p>
         </div>
