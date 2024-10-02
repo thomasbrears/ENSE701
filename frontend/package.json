@@ -22,6 +22,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.2",
     "react-icons": "^5.2.1",
+    "react-toastify": "^10.0.5",
     "sass": "^1.77.8"
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-toastify": "^4.0.2",
     "@types/testing-library__jest-dom": "^5.14.9",
     "babel-jest": "^29.7.0",
     "cypress": "^13.15.0",
