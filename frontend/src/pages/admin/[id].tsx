@@ -28,11 +28,7 @@ const ArticleDetails: React.FC = () => {
     const router = useRouter();
     const { id } = router.query; // Get the article ID from the URL
     const [article, setArticle] = useState<Article | null>(null);
-    const [evidence, setEvidence] = useState<string>(''); // Evidence state
-    const [analysisNotes, setAnalysisNotes] = useState<string>(''); // Analysis notes state
-    const [evidenceSummary, setEvidenceSummary] = useState<'Weak' | 'Moderate' | 'Strong' | null>(null); // New state
     const [error, setError] = useState<string | null>(null); // Error state
-    const [activeEditField, setActiveEditField] = useState<string | null>(null); // Track the active editing field
     // Fetch article details on component mount
     useEffect(() => {
         if (id) {
@@ -40,9 +36,6 @@ const ArticleDetails: React.FC = () => {
                 try {
                     const response = await axios.get(`${API_URL}/articles/${id}`);
                     setArticle(response.data);
-                    setEvidence(response.data.evidence || ''); // Initialize evidence state
-                    setAnalysisNotes(response.data.analysis_notes || ''); // Initialize analysis notes state
-                    setEvidenceSummary(response.data.evidence_summary || null); // Initialize evidence summary state
                 } catch (error) {
                     console.error('Error fetching article details:', error);
                     setError('Error fetching article details.');

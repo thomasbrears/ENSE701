@@ -108,7 +108,7 @@ const AllArticles: NextPage = () => {
   return (
     <div>
       <div className="container">
-        <h1>All Published Articles</h1>
+        
         <SearchBar onSearch={handleSearch} />
         {isLoading ? (
           <p>Loading articles...</p>
