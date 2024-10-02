@@ -14,11 +14,21 @@ router.get('/published', async (req, res) => {
   }
 });
 
+router.get('/rejected', async (req, res) => {
+  try {
+    const rejectedArticles = await Article.find({ status: 'rejected' });
+    res.status(200).json(rejectedArticles);
+  } catch (error) {
+    console.error('Error retrieving rejected articles:', error);
+    res.status(500).json({ message: 'Error fetching rejected articles', error });
+  }
+});
+
 // POST /api/articles - Create a new article
 router.post('/', async (req, res) => {
   console.log("POST /api/articles - Create a new article")
   try {
-    const { title, authors, source, journal, se_practice, research_type, publication_year, 
+    const { title, authors, source, journal, se_practice, research_type, publication_year,
       volume, number, pages, doi, summary, claim, linked_discussion, user_name, user_email } = req.body;
 
     const newArticle = new Article({
@@ -36,13 +46,13 @@ router.post('/', async (req, res) => {
       summary,
       claim,
       linked_discussion,
-      user_name, 
+      user_name,
       user_email,
       status: 'pending', // Default status to pending
     });
 
     const savedArticle = await newArticle.save(); // Save and store the result in `savedArticle`
-    
+
     // Return the submission ID along with the success message
     res.status(201).json({ message: 'Article submitted successfully!', submissionId: savedArticle._id });
   } catch (error) {
