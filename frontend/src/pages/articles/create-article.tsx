@@ -19,6 +19,9 @@ const NewDiscussion = () => {
   const [volume, setVolume] = useState("");
   const [number, setNumber] = useState("");
   const [pages, setPages] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [submissionId, setSubmissionId] = useState<string | null>(null);
 
   const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,13 +40,19 @@ const NewDiscussion = () => {
         volume,
         number,
         pages,
+        user_name: userName,
+        user_email: userEmail
       };
 
       console.log("Submitting article with data:", articleData);
       const response = await axios.post(`${API_URL}/articles`, articleData);
 
       if (response.status === 201) {
-        alert("Article submitted successfully!");
+        setSubmissionId(response.data.submissionId); // Store submission ID
+        
+        // Display success message with the submission ID
+        alert(`Article submitted successfully! Your submission ID is: ${response.data.submissionId}`);
+
         // Clear the form after successful submission
         setTitle("");
         setAuthors([]);
@@ -57,6 +66,8 @@ const NewDiscussion = () => {
         setVolume("");
         setNumber("");
         setPages("");
+        setUserName("");
+        setUserEmail("");
       }
     } catch (error) {
       console.error("Error submitting article:", error);
@@ -74,6 +85,41 @@ const NewDiscussion = () => {
     <div className={formStyles.container}>
       <h1 className={formStyles.header}>Submit a New Article</h1>
       <form className={formStyles.form} onSubmit={submitNewArticle}>
+        <p className={formStyles.sectionSeparator}>
+          <span>Submitter Details</span>
+        </p>
+
+        <div className={formStyles.inlineGroup}>
+          <div className={formStyles.inlineItem}>
+            <label htmlFor="userName">Your Name</label>
+            <input
+              type="text"
+              id="userName"
+              value={userName}
+              className={formStyles.input}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+          <div className={formStyles.inlineItem}>
+            <label htmlFor="userEmail">Your Email</label>
+            <input
+              type="email"
+              id="userEmail"
+              value={userEmail}
+              className={formStyles.input}
+              onChange={(e) => setUserEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+        </div>
+
+        <p className={formStyles.sectionSeparator}>
+          <span>Article Details</span>
+        </p>
+
         <div className={formStyles.field}>
           <label htmlFor="title">Title</label>
           <input
@@ -241,6 +287,16 @@ const NewDiscussion = () => {
           Submit Article
         </button>
       </form>
+
+      {/* Show the submission ID after successful submission */}
+      {submissionId && (
+        <div className={formStyles.submissionId}>
+          <h3 style={{ textAlign:'left' }}>Article Submitted Successfully</h3>
+          <p>Thank you for submiting an article to the SPPED database! <br />
+          Your submission will now be reviewed by our team and you will be advised when it is published <br />
+          Your article submission ID is <strong>{submissionId}</strong></p>
+        </div>
+      )}
     </div>
   );
 };

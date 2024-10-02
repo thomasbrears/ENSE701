@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
 const articleSchema = new mongoose.Schema({
+  user_name: { type: String, required: true },
+  user_email: { type: String, required: true },
   title: { type: String, required: true },
   authors: [String],
   journal: String, 
