@@ -12,6 +12,7 @@ interface ArticlesInterface {
   pubyear: string;
   journal: string;
   se_practice: string;
+  doi: string;
   research_type: string;
 }
 
@@ -37,6 +38,7 @@ const AllArticles: NextPage = () => {
           journal: article.journal ?? "",
           se_practice: article.se_practice ?? "",
           research_type: article.research_type ?? "",
+          doi: article.doi ?? "",
         }));
 
         setArticles(formattedArticles);
@@ -79,6 +81,7 @@ const AllArticles: NextPage = () => {
     { key: "journal", label: "Journal/Conference" },
     { key: "se_practice", label: "SE Practice" },
     { key: "research_type", label: "Research Type" },
+    { key: "doi", label: "Source" },
     { key: "actions", label: "" },
   ];
 
@@ -105,7 +108,7 @@ const AllArticles: NextPage = () => {
   return (
     <div>
       <div className="container">
-        <h1>All Published Articles</h1>
+        
         <SearchBar onSearch={handleSearch} />
         {isLoading ? (
           <p>Loading articles...</p>

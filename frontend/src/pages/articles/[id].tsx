@@ -20,6 +20,8 @@ interface ArticleDetailsProps {
     doi: string;
     claim: string;
     evidence: string | null;
+    evidence_summary: string | null;
+    analysis_notes: string | null;
     summary: string;
   };
 }
@@ -119,6 +121,21 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
           <p className={styles.text}>{article.evidence}</p>
         </div>
       )}
+
+     {article.analysis_notes && (
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Analyst Notes</h2>
+          <p className={styles.text}>{article.analysis_notes}</p>
+        </div>
+      )}
+
+      {article.evidence_summary && (
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Evidence Summary</h2>
+          <p className={styles.text}>{article.evidence_summary}</p>
+        </div>
+      )}
+
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -181,6 +198,8 @@ export const getStaticProps: GetStaticProps<ArticleDetailsProps> = async ({ para
           doi: article.doi || "No DOI available",
           claim: article.claim || "No Claim available",
           evidence: article.evidence || "No Evidence not available",
+          evidence_summary: article.evidence_summary || "No evidence summary available",
+          analysis_notes: article.analysis_notes || "No analysis notes available",
           summary: article.summary || "No summary available",
         },
       },

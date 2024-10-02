@@ -11,9 +11,11 @@ interface Article {
   publication_year: number;
   research_type: string | null;
   se_practice: string | null;
+  doi: string;
   journal: string;
   status: string;
   evidence: string;
+  analysis_notes: string;
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
@@ -45,9 +47,8 @@ const AnalystDashboard: React.FC = () => {
     { key: "title", label: "Title" },
     { key: "authors", label: "Authors" },
     { key: "publication_year", label: "Publication Year" },
-    { key: "journal", label: "Journal/Conference" },
-    { key: "se_practice", label: "SE Practice" },
-    { key: "research_type", label: "Research Type" },
+    { key: "claim", label: "Claim" },
+    { key: "doi", label: "Source" },
     { key: 'actions', label: '' },
   ];
 
