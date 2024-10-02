@@ -33,7 +33,7 @@ const LookupSubmission = () => {
       case 'published':
         return 'Your article is live, YAY! Click the link below to view it.';
       case 'rejected':
-        return 'Sorry, your article was been rejected.';
+        return 'Sorry, your article was been rejected. Click the link below to see why.';
       default:
         return 'Unknown status';
     }
@@ -125,6 +125,13 @@ const LookupSubmission = () => {
               {article.status === 'published' && (
                 <p><Link href={`/articles/${article._id}`} legacyBehavior>
                     <a>View Publised Article</a>
+                  </Link>
+                </p>
+              )}
+              {/* Show link to the article if its rejected by analysit */}
+              {article.status === 'rejected' && (
+                <p><Link href={`../admin/${article._id}`} legacyBehavior>
+                    <a>View Rejected Article</a>
                   </Link>
                 </p>
               )}
