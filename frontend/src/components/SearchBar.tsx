@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import styles from '../styles/SearchBar.module.scss';
-
+import { FaSearch } from 'react-icons/fa';
+import formStyles from "@/styles/Forms.module.scss";
 // Define the interface for the SearchBar props.
 // This ensures that the 'onSearch' function is passed in as a prop,
 // which accepts a string and does not return anything.
@@ -31,14 +31,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   // The JSX part of the component, rendering the search bar.
   return (
-    <div className={styles.searchBarContainer}>
-      <form onSubmit={handleSubmit} className={styles.inputWrapper}>
+    <div className={formStyles.container}>
+      <h1 className={formStyles.header}>All Published Articles</h1>
+      <form onSubmit={handleSubmit} className={formStyles.field} style={{ position: 'relative', paddingRight: '40px' }}>
         <input
-          className={styles.inputField}
+          className={formStyles.inputField}
           value={searchTerm}
           onChange={handleInputChange}
           placeholder="Type to search by title, author or date..."
           required
+        />
+        <FaSearch
+          className={formStyles.searchIcon}
         />
       </form>
     </div>
