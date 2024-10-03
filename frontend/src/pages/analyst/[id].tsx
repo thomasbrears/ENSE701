@@ -242,7 +242,7 @@ const ArticleDetails: React.FC = () => {
       )}
 
       {/* Evidence Summary Toggle */}
-      <h2 className={styles.sectionTitle}>Evidence Summary</h2>
+      <p className={formStyles.sectionSeparator}><span>Evidence Summary</span></p>
 
       <div className={formStyles.form}>
         <select
@@ -266,7 +266,7 @@ const ArticleDetails: React.FC = () => {
       <br />
       <button className={formStyles.addButton} onClick={() => router.back()}>Back to Dashboard</button>
       <br />
-      <ToastContainer autoClose={3000}/>
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };
