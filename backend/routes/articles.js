@@ -84,7 +84,7 @@ router.post('/', async (req, res) => {
     moderators.forEach(async (mod) => {
       await sendEmail(
         mod.email, // Who the email is sent to - moderator(s)
-        `Moderation Required: ${title} | SPEED`, // moderator email subject then body (in HTML format)
+        `New Article submited for Moderation: ${title} | SPEED`, // moderator email subject then body (in HTML format)
         `
         <p>Kia ora Moderator,</p>
         <p>A new article titled "<strong>${title}</strong>" has been submitted to SPEED by ${user_name} and requires moderation.</p>
