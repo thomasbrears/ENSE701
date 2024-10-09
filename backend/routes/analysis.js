@@ -125,6 +125,20 @@ router.post('/articles/:id/reject', async (req, res) => {
         );
         if (!article) return res.status(404).json({ message: 'Article not found' });
 
+        const rejectionDate = moment().format('MMMM Do YYYY, h:mm:ss a'); // Format the date for the email
+
+        // Send email to the original submitter
+        await sendEmail(
+          article.user_email,
+          `Sorry, your article has been REJECTED: ${article.title}`,
+          `
+          <p>Kia ora ${article.user_name},</p>
+          <p>We regret to inform you that your article titled "<strong>${article.title}</strong>" has been rejected for SPEED on ${rejectionDate}.</p>
+          <p>Thank you for your submission to the SPEED database, and we encourage you to review your submission and make any necessary adjustments before resubmitting.</p>
+          <p>Best regards,<br/>The Software Practice Empirical Evidence Database Team</p>
+          `
+        );
+      
         res.status(200).json({message: 'Article rejected', article});
     } catch (error) {
         console.error('Error rejecting the article:', error);
