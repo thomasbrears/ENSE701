@@ -1,7 +1,9 @@
 // src/services/adminService.js
 import axios from 'axios';
 
-const API_URL = 'https://your-api-url.com/api/admin';
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://ense701-g6.vercel.app/api'
+  : 'http://localhost:8000/api';
 
 interface EMail {
     email: string,
@@ -10,16 +12,16 @@ interface EMail {
 
 const addEmail = async (email: EMail) => {
     try {
-        const response = await axios.post(`${API_URL}/add-email`, { email });
+        const response = await axios.post(`${API_URL}/emails`,email);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-const deleteEmail = async (email: EMail) => {
+const deleteEmail = async (email: string) => {
     try {
-        const response = await axios.delete(`${API_URL}/delete-email`, { data: { email } });
+        const response = await axios.delete(`${API_URL}/emails/${email}`);
         return response.data;
     } catch (error) {
         throw error;

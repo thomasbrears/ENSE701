@@ -6,6 +6,7 @@ import searchRoutes from './routes/search.js';
 import analysisRoutes from './routes/analysis.js';
 import moderationRoutes from './routes/moderation.js';
 import scoreRoutes from './routes/scores.js';
+import emailRoutes from './routes/emails.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/api/search', searchRoutes);
 app.use('/api/analysis', analysisRoutes);
 app.use('/api/moderation', moderationRoutes);
 app.use('/api/scores', scoreRoutes);
+app.use('/api/emails', emailRoutes);
 
 // Connect to the database and start the server
 connectToDb(() => {
