@@ -24,6 +24,34 @@ router.get('/rejected', async (req, res) => {
   }
 });
 
+
+router.post("/edit", async (req, res) => {
+  console.log("POST /api/articles/edit - Edit an article");
+  try {
+    const { id, title, authors, source, journal, se_practice, research_type, publication_year,
+      volume, number, pages, doi, summary, claim, linked_discussion, user_name, user_email } = req.body;
+
+    const updatedArticle = await Article.findByIdAndUpdate(id, {
+      title,
+      authors,
+      source,
+      journal,
+      se_practice,
+      research_type,
+      publication_year,
+      volume,
+      number,
+      pages,
+      doi,
+    })
+
+    return res.status(200).json({ message: 'Article updated successfully!', updatedArticle });
+  } catch (error) {
+    console.error('Error editing the article:', error);
+    return res.status(500).json({ message: 'Error editing the article', error });
+  }
+})
+
 // POST /api/articles - Create a new article
 router.post('/', async (req, res) => {
   console.log("POST /api/articles - Create a new article")

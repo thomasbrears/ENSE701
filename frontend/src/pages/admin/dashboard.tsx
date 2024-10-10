@@ -6,6 +6,7 @@ const AdminDashboard = () => {
     <div>
       <h1>Admin Dashboard Placeholder</h1>
       <p>This is the Admin Dashboard page.</p>
+      <button>添加邮件</button>
     </div>
   );
 };
