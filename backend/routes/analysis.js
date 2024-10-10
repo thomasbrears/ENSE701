@@ -1,5 +1,7 @@
 import express from 'express';
-import Article from '../models/Article.js';   // Import the Article model
+import Article from '../models/Article.js'; // Article model
+import { sendEmail } from '../utils/mailjet.js'; // Send email utility
+import moment from 'moment'; // To format dates
 
 const router = express.Router();
 
@@ -87,6 +89,23 @@ router.post('/articles/:id/approve', async (req, res) => {
 
     if (!article) return res.status(404).json({ message: 'Article not found' });
 
+    const publicationDate = moment(article.submitted_at).format('MMMM Do YYYY, h:mm:ss a'); // Format the date for the email
+
+    // Send email to the original submitter
+    await sendEmail(
+      article.user_email, // Who the email is sent to
+      `Your Article Has Been Published: ${article.title}`, // email subject then body (in HTML format)
+      `
+      <p>Kia ora ${article.user_name},</p>
+      <p>Good News! Your article titled "<strong>${article.title}</strong>" has been published on the SPEED website.</p>
+      <p><strong>Published on</strong>: ${publicationDate}<br/>
+      <strong>Submission ID</strong>: ${article._id}</p>
+      <p>You can view your article by on this link: <a href="https://cise-aut.vercel.app/articles/${article._id}">View Published Article</a></p>
+      <p>Thank you for your contribution to the SPEED database.</p>
+      <p>Best regards,<br/>The Software Practice Empirical Evidence Database Team</p>
+      `
+    );
+
     res.status(200).json({ message: 'Article approved and published', article });
   } catch (error) {
     console.error('Error approving the article:', error);
@@ -106,6 +125,20 @@ router.post('/articles/:id/reject', async (req, res) => {
         );
         if (!article) return res.status(404).json({ message: 'Article not found' });
 
+        const rejectionDate = moment().format('MMMM Do YYYY, h:mm:ss a'); // Format the date for the email
+
+        // Send email to the original submitter
+        await sendEmail(
+          article.user_email,
+          `Sorry, your article has been REJECTED: ${article.title}`,
+          `
+          <p>Kia ora ${article.user_name},</p>
+          <p>We regret to inform you that your article titled "<strong>${article.title}</strong>" has been rejected for SPEED on ${rejectionDate}.</p>
+          <p>Thank you for your submission to the SPEED database, and we encourage you to review your submission and make any necessary adjustments before resubmitting.</p>
+          <p>Best regards,<br/>The Software Practice Empirical Evidence Database Team</p>
+          `
+        );
+      
         res.status(200).json({message: 'Article rejected', article});
     } catch (error) {
         console.error('Error rejecting the article:', error);
