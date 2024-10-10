@@ -28,7 +28,7 @@ router.post('/articles/:id/approve', async (req, res) => {
         );
         if (!article) return res.status(404).json({ message: 'Article not found' });
 
-        const submissionDate = moment(savedArticle.submitted_at).format('MMMM Do YYYY, h:mm:ss a'); // Format the date for the email
+        const submissionDate = moment(article.submitted_at).format('MMMM Do YYYY, h:mm:ss a'); // Format the date for the email
 
         // Fetch analyst(s) from the database to send the email to
         const analysts = await Role.find({ role: 'analyst' });

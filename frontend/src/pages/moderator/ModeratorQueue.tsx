@@ -51,6 +51,32 @@ const ModeratorQueue: React.FC = () => {
         { key: 'actions', label: 'Actions', width: '350px!important'},
     ];
 
+    const handleReject = async (articleId:string)=>{
+       try {
+            const result = await axios.post(`${API_URL}/moderation/articles/${articleId}/reject`);
+            if(result.status === 200){
+                alert('Article rejected successfully')
+                setArticles(articles.filter(article => article._id !== articleId));
+            }
+       }catch (error) {
+            console.error('Error rejecting article:', error);
+            setError('Error rejecting article.');
+       }
+    }
+
+    const handleApprove = async(articleId:string)=>{
+        try {
+            const result =  await axios.post(`${API_URL}/moderation/articles/${articleId}/approve`);
+            if(result.status === 200){
+                alert('Article approve successfully')
+                setArticles(articles.filter(article => article._id !== articleId));
+            }
+        }catch (error) {
+            console.error('Error approving article:', error);
+            setError('Error approving article.');
+        }
+    }
+
     const tableData = articles.map((article) => ({
         ...article,
         authors: article.authors,
@@ -71,8 +97,7 @@ const ModeratorQueue: React.FC = () => {
                         Review
                     </button>
                 </Link>
-                <Link href={`/moderator/${article._id}`} passHref>
-                    <button
+                <button
                         style={{
                             cursor: 'pointer',
                             padding: '0.5em 1em',
@@ -82,12 +107,11 @@ const ModeratorQueue: React.FC = () => {
                             borderRadius: '4px',
                             marginTop: '10px'
                         }}
+                        onClick={()=>handleApprove(article._id)}
                     >
-                        Pass
-                    </button>
-                </Link>
-                <Link href={`/moderator/${article._id}`} passHref>
-                    <button
+                    Approve
+                </button>
+                <button
                         style={{
                             cursor: 'pointer',
                             padding: '0.5em 1em',
@@ -97,10 +121,10 @@ const ModeratorQueue: React.FC = () => {
                             borderRadius: '4px',
                             marginTop: '10px'
                         }}
+                        onClick={()=>handleReject(article._id)}
                     >
                         Reject
                     </button>
-                </Link>
             </>
         ),
     }));
