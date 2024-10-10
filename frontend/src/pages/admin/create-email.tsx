@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
-import { getAllEmails, addEmail, deleteEmail } from "../../api/email";
+import { getAllEmails, addEmail, deleteEmail } from "../../api/roles";
 
 const Email = () => {
   const [emails, setEmails] = useState([]);

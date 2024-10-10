@@ -10,31 +10,31 @@ interface EMail {
     role: string
 }
 
-const addEmail = async (email: EMail) => {
+const addRole = async (email: EMail) => {
     try {
-        const response = await axios.post(`${API_URL}/emails`,email);
+        const response = await axios.post(`${API_URL}/roles`,email);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-const deleteEmail = async (email: string) => {
+const deleteRole = async (email: string) => {
     try {
-        const response = await axios.delete(`${API_URL}/emails/${email}`);
+        const response = await axios.delete(`${API_URL}/roles/${email}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-const getAllEmails = async () => {
+const getAllRoles = async () => {
     try {
-        const response = await axios.get(`${API_URL}/emails`);
+        const response = await axios.get(`${API_URL}/roles`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-export { addEmail, deleteEmail, getAllEmails };
+export { addRole , deleteRole , getAllRoles  };

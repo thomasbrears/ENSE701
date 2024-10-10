@@ -1,40 +1,42 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../components/Layout";
-import { getAllEmails, addEmail, deleteEmail } from "../../api/email";
+import { getAllRoles, addRole, deleteRole } from "../../api/roles";
 
-interface EMail {
+interface Role {
   email: string,
   role: string
 }
 
 
 const AdminDashboard = () => {
-  const [emails, setEmails] = useState<EMail[]>([]);
+  const [roles, setEmails] = useState<Role[]>([]);
   const [newEmail, setNewEmail] = useState<string>('');
   const [newRole, setRole] = useState<string>('moderator');
-
-  useEffect(() => {
-    fetchEmails();
-  }, []);
-
-  const fetchEmails = async () => {
+  
+  const fetchRoles = async () => {
     try {
-      const data = await getAllEmails();
+      console.log("请求角色");
+      const data = await getAllRoles();
+      console.log(data)
+
       setEmails(data);
     } catch (error) {
       console.error('Error fetching emails:', error);
     }
   };
 
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+
   const handleAddEmail = async () => {
     try {
-      const email = {
+      const role = {
         email: newEmail,
         role: newRole
       };
-      await addEmail(email);
+      await addRole(role);
       setNewEmail('');
-      fetchEmails();
+      fetchRoles();
     } catch (error) {
       console.error('Error adding email:', error);
     }
@@ -42,8 +44,8 @@ const AdminDashboard = () => {
 
   const handleDeleteEmail = async (email:string) => {
     try {
-      await deleteEmail(email);
-      fetchEmails();
+      await deleteRole(email);
+      fetchRoles();
     } catch (error) {
       console.error('Error deleting email:', error);
     }
@@ -86,7 +88,7 @@ const AdminDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {emails.map((email) => (
+          {roles.map((email) => (
             <tr key={email.email}>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{email.email}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{email.role}</td>

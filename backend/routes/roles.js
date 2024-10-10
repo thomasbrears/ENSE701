@@ -1,21 +1,21 @@
 import express from 'express';
-import Email from '../models/EMail.js';
+import Roles from '../models/Roles.js';
 
 const router = express.Router();
 
 // Detail
-router.get("/:id", async (req, res) => {
-    console.log(`"GET /api/score/${req.params.id} - Retrieve a single score by doc ID"`)
+router.get("/:email", async (req, res) => {
+    console.log(`"GET /api/score/${req.params.email} - Retrieve a single score by doc ID"`)
     try {
-        const email = await Email.find({
-            doc_id: req.params.id
+        const roleModel = await Roles.findOne({
+            email: req.params.email
         });
         
-        if (!email) {
+        if (!roleModel) {
             return res.status(404).json({ message: 'Score not found' });
         }
 
-        return res.status(200).json(email);
+        return res.status(200).json(roleModel);
     } catch (error) {
         console.error('Error retrieving score by ID:', error);
         return res.status(500).json({ message: 'Error fetching score by ID', error });
@@ -23,11 +23,11 @@ router.get("/:id", async (req, res) => {
 })
 
 // Delete
-router.delete("/:id", async (req, res) => {
-    console.log(`"DELETE /api/emails/${req.params.id} - Delete"`)
+router.delete("/:email", async (req, res) => {
+    console.log(`"DELETE /api/emails/${req.params.email} - Delete"`)
     try {
-        await Email.deleteOne({
-            doc_id: req.params.id
+        await Roles.deleteOne({
+            email: req.params.email
         });
         return res.status(200).json({ message: 'Email deleted' });
     } catch (error) {
@@ -36,22 +36,24 @@ router.delete("/:id", async (req, res) => {
 })
 
 // Update
-router.put("/:id", async (req, res) => {
-    console.log(`"PUT /api/emails/${req.params.id} - Update"`)
+router.put("/:email", async (req, res) => {
+    console.log(`"PUT /api/emails/${req.params.email} - Update"`)
     try {
-        const email = await Email.findOne({
-            doc_id: req.params.id
+        const { email, role } = req.body;
+
+        const roleModel = await Roles.findOne({
+            email: req.params.email
         });
 
-        if (!email) {
+        if (!roleModel) {
             return res.status(404).json({ message: 'Email not found' });
         }
 
-        email.email = req.body.email;
-        email.role = req.body.role;
-        email.save();
+        roleModel.email = email;
+        roleModel.role = role;
+        roleModel.save();
 
-        return res.status(200).json(email);
+        return res.status(200).json(roleModel);
     } catch (error) {
         console.error('Error retrieving score by ID:', error);
         return res.status(500).json({ message: 'Error fetching score by ID', error });
@@ -62,15 +64,15 @@ router.put("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
     console.log(`"POST /api/emails - Create"`)
     try {
-        const { doc_id, average_score } = req.body;
+        const { email, role } = req.body;
 
-        const newEmail = new Email({
-            doc_id,
-            average_score
+        const newRole = new Roles({
+            email,
+            role
         })
 
-        await newEmail.save();
-        return res.status(201).json(newEmail);
+        await newRole.save();
+        return res.status(201).json(newRole);
     } catch (error) {
         console.error('Error retrieving all score:', error);
         return res.status(500).json({ message: 'Error fetching score', error });
@@ -81,11 +83,8 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
     console.log(`"GET /api/emails - Get All"`);
     try {
-        const emails = await Email.find({ doc_id: req.params.id });
-        if (!emails || emails.length === 0) {
-            return res.status(200).json({ doc_id: req.params.id, average_score: 0 });
-        }
-        return res.status(200).json({ doc_id: req.params.id, average_score: averageScore });
+        const roles = await Roles.find();
+        return res.status(200).json(roles);
     } catch (error) {
         console.error('Error retrieving average score by ID:', error);
         return res.status(500).json({ message: 'Error fetching average score by ID', error });
