@@ -48,7 +48,7 @@ const ModeratorQueue: React.FC = () => {
         { key: "journal", label: "Journal/Conference" },
         { key: "se_practice", label: "SE Practice" },
         { key: "research_type", label: "Research Type" },
-        { key: 'actions', label: '' },
+        { key: 'actions', label: 'Actions', width: '350px!important'},
     ];
 
     const tableData = articles.map((article) => ({
@@ -65,7 +65,7 @@ const ModeratorQueue: React.FC = () => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            marginRight: '10px'
+                            marginTop: '10px'
                         }}
                     >
                         Review
@@ -80,7 +80,7 @@ const ModeratorQueue: React.FC = () => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            marginRight: '10px'
+                            marginTop: '10px'
                         }}
                     >
                         Pass
@@ -95,6 +95,7 @@ const ModeratorQueue: React.FC = () => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
+                            marginTop: '10px'
                         }}
                     >
                         Reject
