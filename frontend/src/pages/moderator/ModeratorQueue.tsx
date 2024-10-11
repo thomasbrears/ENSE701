@@ -63,6 +63,7 @@ const ModeratorQueue: React.FC = () => {
             setError('Error rejecting article.');
        }
     }
+    
 
     const handleApprove = async(articleId:string)=>{
         try {

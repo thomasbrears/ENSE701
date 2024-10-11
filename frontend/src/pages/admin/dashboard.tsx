@@ -1,17 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { getAllRoles, addRole, deleteRole } from "../../api/roles";
+import axios from "axios";
+
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://ense701-g6.vercel.app/api'
+  : 'http://localhost:8000/api';
 
 interface Role {
   email: string,
   role: string
 }
 
+const addRole = async (role: Role) => {
+  try {
+    const response = await axios.post(`${API_URL}/roles`, role);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteRole = async (email: string) => {
+  try {
+    const response = await axios.delete(`${API_URL}/roles/${email}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getAllRoles = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/roles`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const AdminDashboard = () => {
   const [roles, setEmails] = useState<Role[]>([]);
   const [newEmail, setNewEmail] = useState<string>('');
   const [newRole, setRole] = useState<string>('moderator');
-  
+
   const fetchRoles = async () => {
     try {
       console.log("请求角色");
@@ -42,7 +72,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDeleteEmail = async (email:string) => {
+  const handleDeleteEmail = async (email: string) => {
     try {
       await deleteRole(email);
       fetchRoles();
