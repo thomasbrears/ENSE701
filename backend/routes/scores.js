@@ -3,7 +3,7 @@ import Score from '../models/Score.js';
 
 const router = express.Router();
 
-// 获取文章评分
+// Get the article score
 router.get("/:id", async (req, res) => {
     console.log(`"GET /api/score/${req.params.id} - Retrieve a single score by doc ID"`)
     try {
@@ -18,7 +18,7 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-// 提交文章评分
+// Submit articles for grading.
 router.post("/", async (req, res) => {
     console.log(`"POST /api/score/${req.params.id} - Create a score by doc ID"`)
     try {
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
     }
 })
 
-// 获取文章平均评分
+// Get the average score of the article
 router.get("/average/:id", async (req, res) => {
     console.log(`"GET /api/score/average/${req.params.id} - Retrieve average score by doc ID"`);
     try {

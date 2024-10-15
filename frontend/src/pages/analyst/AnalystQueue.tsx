@@ -20,7 +20,7 @@ const API_URL = process.env.NODE_ENV === 'production'
     ? 'https://ense701-g6.vercel.app/api'
     : 'http://localhost:8000/api';
 
-const ModeratorQueue: React.FC = () => {
+const AnalystQueue: React.FC = () => {
     const [articles, setArticles] = useState<Article[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -48,35 +48,8 @@ const ModeratorQueue: React.FC = () => {
         { key: "journal", label: "Journal/Conference" },
         { key: "se_practice", label: "SE Practice" },
         { key: "research_type", label: "Research Type" },
-        { key: 'actions', label: 'Actions', width: '350px!important'},
+        { key: 'actions', label: '' },
     ];
-
-    const handleReject = async (articleId:string)=>{
-       try {
-            const result = await axios.post(`${API_URL}/moderation/articles/${articleId}/reject`);
-            if(result.status === 200){
-                alert('Article rejected successfully')
-                setArticles(articles.filter(article => article._id !== articleId));
-            }
-       }catch (error) {
-            console.error('Error rejecting article:', error);
-            setError('Error rejecting article.');
-       }
-    }
-    
-
-    const handleApprove = async(articleId:string)=>{
-        try {
-            const result =  await axios.post(`${API_URL}/moderation/articles/${articleId}/approve`);
-            if(result.status === 200){
-                alert('Article approve successfully')
-                setArticles(articles.filter(article => article._id !== articleId));
-            }
-        }catch (error) {
-            console.error('Error approving article:', error);
-            setError('Error approving article.');
-        }
-    }
 
     const tableData = articles.map((article) => ({
         ...article,
@@ -92,13 +65,14 @@ const ModeratorQueue: React.FC = () => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            marginTop: '10px'
+                            marginRight: '10px'
                         }}
                     >
                         Review
                     </button>
                 </Link>
-                <button
+                <Link href={`/moderator/${article._id}`} passHref>
+                    <button
                         style={{
                             cursor: 'pointer',
                             padding: '0.5em 1em',
@@ -106,13 +80,14 @@ const ModeratorQueue: React.FC = () => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            marginTop: '10px'
+                            marginRight: '10px'
                         }}
-                        onClick={()=>handleApprove(article._id)}
                     >
-                    Approve
-                </button>
-                <button
+                        Pass
+                    </button>
+                </Link>
+                <Link href={`/moderator/${article._id}`} passHref>
+                    <button
                         style={{
                             cursor: 'pointer',
                             padding: '0.5em 1em',
@@ -120,12 +95,11 @@ const ModeratorQueue: React.FC = () => {
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            marginTop: '10px'
                         }}
-                        onClick={()=>handleReject(article._id)}
                     >
                         Reject
                     </button>
+                </Link>
             </>
         ),
     }));
@@ -146,4 +120,4 @@ const ModeratorQueue: React.FC = () => {
     );
 };
 
-export default ModeratorQueue;
+export default AnalystQueue;

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import styles from "../../styles/ArticleDetails.module.scss";
 import Rating from "@/components/Rating";
+import BarChartEx from "@/components/BarChartEx";
 
 interface ArticleDetailsProps {
   article: {
@@ -122,7 +123,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
         </div>
       )}
 
-     {article.analysis_notes && (
+      {article.analysis_notes && (
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Analyst Notes</h2>
           <p className={styles.text}>{article.analysis_notes}</p>
@@ -151,7 +152,13 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
         }}></div>
       </div>
 
-    </div>
+      <div style={{
+        marginTop: '30px'
+      }}>
+        <BarChartEx articleId={article.id}></BarChartEx>
+      </div>
+
+    </div >
   );
 };
 
