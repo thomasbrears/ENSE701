@@ -6,17 +6,20 @@ interface BarChartProps {
 
 // Average scoring component
 const AverageRating: React.FC<BarChartProps> = ({ scores }) => {
-
   // Calculate the average score
   const averageRating = (scores.reduce((sum, rating) => sum + rating, 0) / scores.length).toFixed(1);
 
-  // Calculate the count of each star.
-  const starCounts = [5, 4, 3, 2, 1].map(
-    (star) => scores.filter((rating) => rating === star).length
-  );
+  // Calculate the count of each star and create an array of objects
+  const starCounts = [5, 4, 3, 2, 1].map((star) => ({
+    star,
+    count: scores.filter((rating) => rating === star).length,
+  }));
 
-  // Find the number of people with the highest rating (used to calculate the bar scale)
-  const maxCount = Math.max(...starCounts);
+  // Sort by count in descending order
+  starCounts.sort((a, b) => b.count - a.count);
+
+  // Find the maximum count (used to calculate the bar scale)
+  const maxCount = Math.max(...starCounts.map(item => item.count));
 
   return (
     <div style={{ maxWidth: '400px' }}>
@@ -24,9 +27,9 @@ const AverageRating: React.FC<BarChartProps> = ({ scores }) => {
         Average Rating: <span style={{ color: '#ff0000', marginLeft: '10px' }}>{averageRating}</span> / 5
       </h2>
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {starCounts.map((count, index) => (
+        {starCounts.map(({ star, count }, index) => (
           <li
-            key={index}
+            key={star}
             style={{
               textAlign: 'left',
               marginBottom: '10px',
@@ -36,21 +39,20 @@ const AverageRating: React.FC<BarChartProps> = ({ scores }) => {
           >
             {/* Star label */}
             <span style={{
-              width: '80px',
-              marginRight: index === 0 ? '22px' : '0', // The first li adds a left margin. 
-            }}>{5 - index} stars:</span>
-            {/* bar chart */}
+              minWidth: '80px',
+            }}>{star} stars:</span>
+            {/* Bar chart */}
             <div
               style={{
                 height: '10px',
-                width: count > 0 ? `${(count / maxCount) * 100}%` : '10px', // Handle the case of 0.
+                minWidth: count > 0 ? `${(count / maxCount) * 100}%` : '10px', // Handle the case of 0.
                 backgroundColor: '#ffd600',
                 marginLeft: '10px',
                 borderRadius: '5px',
                 transition: 'width 0.3s ease', // Add animation transition effect
               }}
             ></div>
-            {/* number of people */}
+            {/* Number of people */}
             <span style={{ marginLeft: '15px' }}>{count}</span>
           </li>
         ))}
