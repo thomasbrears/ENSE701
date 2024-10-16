@@ -33,6 +33,23 @@ router.post('/articles/:id/analysis_notes', async (req, res) => {
     }
 });
 
+router.post('/articles/:id/claim', async (req, res) => {
+    const articleId = req.params.id;
+    const { claim } = req.body;
+
+    try {
+        const article = await Article.findById(articleId);
+        if (!article) return res.status(404).json({ message: 'Article not found' });
+
+        article.claim = claim;
+        await article.save();
+        res.status(200).json({message: 'Claim succefully submitted', article});
+    } catch (error) {
+        console.error('Error saving the claim:', error);
+        res.status(500).json({ message: 'Error saving the claim', error });
+    }
+});
+
 router.post('/articles/:id/evidence', async (req, res) => {
     const articleId = req.params.id;
     const { evidence } = req.body;
@@ -138,7 +155,7 @@ router.post('/articles/:id/reject', async (req, res) => {
           <p>Best regards,<br/>The Software Practice Empirical Evidence Database Team</p>
           `
         );
-      
+
         res.status(200).json({message: 'Article rejected', article});
     } catch (error) {
         console.error('Error rejecting the article:', error);
