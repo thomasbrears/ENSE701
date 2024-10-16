@@ -22,7 +22,7 @@ const articleSchema = new mongoose.Schema({
   moderation_notes: String,
   analysis_notes: { type: String, default: null }, // Analysis will add the analysis notes later
   submitted_at: { type: Date, default: Date.now }, // Timestamp of submission
-  moderated_at: Date,  // Timestamp when moderated
+  moderated_at: { type: Date, default: Date.now},  // Timestamp when moderated
   analyzed_at: { type: Date, default: Date.now},  // Timestamp when analyzed
 });
 
