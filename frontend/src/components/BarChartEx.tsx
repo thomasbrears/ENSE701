@@ -1,80 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import axios from 'axios';
-import moment from 'moment';
-
-const API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://ense701-g6.vercel.app/api'
-  : 'http://localhost:8000/api';
+import React from 'react';
 
 interface BarChartProps {
-  articleId?: string;
+  scores: number[];
 }
 
-interface Score {
-  _id: string;
-  doc_id: string,
-  average_score: number,
-  create_time: Date,
-}
+// Average scoring component
+const AverageRating: React.FC<BarChartProps> = ({ scores }) => {
 
-const BarChartEx: React.FC<BarChartProps> = ({ articleId }) => {
+  // Calculate the average score
+  const averageRating = (scores.reduce((sum, rating) => sum + rating, 0) / scores.length).toFixed(1);
 
-  const [scores, setScores] = useState<Score[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // Calculate the count of each star.
+  const starCounts = [5, 4, 3, 2, 1].map(
+    (star) => scores.filter((rating) => rating === star).length
+  );
 
-  useEffect(() => {
-    const fetchArticleScores = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/scores/${articleId}`);
-        let data = response.data;
-
-        // 按 average_score 从大到小排序
-        data = data.sort((a: any, b: any) => b.average_score - a.average_score);
-
-        // 格式化 create_time
-        data = data.map((item: any) => ({
-          ...item,
-          create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')
-        }));
-
-        setScores(data);
-      } catch (error) {
-        console.error('Error fetching articles for analysis:', error);
-        setError('Error fetching articles for analysis.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchArticleScores();
-
-  }, [articleId]);
+  // Find the number of people with the highest rating (used to calculate the bar scale)
+  const maxCount = Math.max(...starCounts);
 
   return (
-    <>
-      {
-        isLoading ? (
-          <p>Loading scores...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : scores.length > 0 ? (
-          <BarChart width={800} height={600} data={scores} layout="vertical">
-            <XAxis type="number" />
-            <YAxis type="category" dataKey="create_time" width={150} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="average_score" fill="#8884d8" />
-          </BarChart>
-        ) : (
-          <p>No scores.</p>
-        )
-      }
-    </>
+    <div style={{ maxWidth: '400px' }}>
+      <h2 style={{ textAlign: 'left' }}>
+        Average Rating: <span style={{ color: '#ff0000', marginLeft: '10px' }}>{averageRating}</span> / 5
+      </h2>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {starCounts.map((count, index) => (
+          <li
+            key={index}
+            style={{
+              textAlign: 'left',
+              marginBottom: '10px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {/* Star label */}
+            <span style={{
+              width: '80px',
+              marginRight: index === 0 ? '22px' : '0', // The first li adds a left margin. 
+            }}>{5 - index} stars:</span>
+            {/* bar chart */}
+            <div
+              style={{
+                height: '10px',
+                width: count > 0 ? `${(count / maxCount) * 100}%` : '10px', // Handle the case of 0.
+                backgroundColor: '#ffd600',
+                marginLeft: '10px',
+                borderRadius: '5px',
+                transition: 'width 0.3s ease', // Add animation transition effect
+              }}
+            ></div>
+            {/* number of people */}
+            <span style={{ marginLeft: '15px' }}>{count}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
-
-
-export default BarChartEx;
+export default AverageRating;

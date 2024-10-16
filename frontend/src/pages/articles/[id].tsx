@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useRouter } from "next/router";
 import styles from "../../styles/ArticleDetails.module.scss";
-import Rating from "@/components/Rating";
-import BarChartEx from "@/components/BarChartEx";
+import Rating from "../../components/Rating";
+import BarChartEx from "../../components/BarChartEx";
 
 interface ArticleDetailsProps {
   article: {
@@ -36,6 +36,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
 
   const [rating, setRating] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
+  const [scores, setScores] = useState<number[]>([]);
 
   useEffect(() => {
     if (article?.id) {
@@ -43,6 +44,8 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
         try {
           const averageScore = await getAverageScore(article.id);
           setScore(averageScore);
+          const scores = await getArticleScores(article.id);
+          setScores(scores);
         } catch (error) {
           console.error("Error fetching average score:", error);
         }
@@ -62,6 +65,19 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
     return average_score;
   }
 
+  async function getArticleScores (articleId:string) {
+      const response = await axios.get(`${API_URL}/scores/${articleId}`);
+
+      let data = response.data;
+
+      // 按 average_score 从大到小排序
+      data = data.sort((a: any, b: any) => b.average_score - a.average_score);
+
+      const scoresArray: [] = data.map((item: any) => item.average_score);
+
+      return scoresArray;
+  };
+
   function handleRatingChange(rating: number) {
     setRating(rating);
   }
@@ -76,6 +92,9 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
       if (result.status === 201) {
         const newAverageScore = await getAverageScore(article.id);
         setScore(newAverageScore);
+        const newScores = await getArticleScores(article.id);
+        setScores(newScores);
+        alert('Rating submitted successfully!');
       }
     } catch (error) {
       console.error("Error submitting article:", error);
@@ -155,7 +174,7 @@ const ArticleDetails: NextPage<ArticleDetailsProps> = ({ article }) => {
       <div style={{
         marginTop: '30px'
       }}>
-        <BarChartEx articleId={article.id}></BarChartEx>
+        <BarChartEx scores={scores}></BarChartEx>
       </div>
 
     </div >
