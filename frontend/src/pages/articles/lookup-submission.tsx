@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import formStyles from "../../styles/Forms.module.scss";
 import { FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
@@ -69,6 +71,7 @@ const LookupSubmission = () => {
     const isValidId = input.length === 24; // check if ID is 24 characters long
   
     if (!isEmail && !isValidId) {
+      toast.error('Please enter a valid email or submission ID.');
       setError("Please enter a valid email or submission ID.");
       return false;
     }
@@ -88,6 +91,7 @@ const LookupSubmission = () => {
 
     if (!searchQuery) { // check if input is empty
       setError("Please enter your email or submission ID.");
+      toast.error('Please enter your email or submission ID.');
       setLoading(false); // Stop loading animation
       return;
     }
@@ -102,15 +106,19 @@ const LookupSubmission = () => {
 
       if (response.data.length === 0) { // if no results found
         setError("No submissions found.");
+        toast.error('No submissions found.');
       } else {
         setArticles(response.data); // set the fetched articles
       }
     } catch (err) {
       if (axios.isAxiosError(err) && !err.response) {
+        toast.error('Network error: Please check your internet connection.');
         setError("Network error: Please check your internet connection.");
       } else if (axios.isAxiosError(err) && err.response?.status === 404) {
+        toast.error('No submissions found.');
         setError("No submissions found.");
       } else {
+        toast.error('There was a server issue. Please try again later.');
         setError("There was a server issue. Please try again later.");
       }    
     } finally {
@@ -187,6 +195,18 @@ const LookupSubmission = () => {
           ))}
         </div>
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

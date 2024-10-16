@@ -2,6 +2,8 @@ import { NextPage } from "next";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SortableTable from "../../components/SortableTable";
 import SearchBar from "../../components/SearchBar";
 
@@ -45,6 +47,7 @@ const AllArticles: NextPage = () => {
         setSearchResults(formattedArticles);  // Initialize with full list
       } catch (error) {
         console.error("Error fetching articles:", error);
+        toast.error("Failed to load articles.");
         setError("Failed to load articles.");
       } finally {
         setIsLoading(false);
@@ -120,6 +123,17 @@ const AllArticles: NextPage = () => {
           <p>No results found.</p>
         )}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

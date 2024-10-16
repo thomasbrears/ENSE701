@@ -332,7 +332,18 @@ const ArticleDetails: React.FC = () => {
             {/* Button to navigate back to the dashboard */}
             <button className={formStyles.addButton} onClick={() => router.back()}>Back to Dashboard</button>
             <br />
-            <ToastContainer autoClose={3000} /> {/* Toast notifications */}
+            
+            <ToastContainer
+                position="top-right"
+                autoClose={8000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

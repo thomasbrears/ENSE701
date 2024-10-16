@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SortableTable from '@/components/SortableTable';
 
 interface Article {
@@ -32,6 +34,7 @@ const ModeratorQueue: React.FC = () => {
                 setArticles(response.data);
             } catch (error) {
                 console.error('Error fetching articles for analysis:', error);
+                toast.error('Failed to load articles for analysis.');
                 setError('Error fetching articles for analysis.');
             } finally {
                 setIsLoading(false);
@@ -55,11 +58,12 @@ const ModeratorQueue: React.FC = () => {
        try {
             const result = await axios.post(`${API_URL}/moderation/articles/${articleId}/reject`);
             if(result.status === 200){
-                alert('Article rejected successfully')
+                toast.success('Article rejected successfully');
                 setArticles(articles.filter(article => article._id !== articleId));
             }
        }catch (error) {
             console.error('Error rejecting article:', error);
+            toast.error('Error rejecting article.');
             setError('Error rejecting article.');
        }
     }
@@ -69,11 +73,12 @@ const ModeratorQueue: React.FC = () => {
         try {
             const result =  await axios.post(`${API_URL}/moderation/articles/${articleId}/approve`);
             if(result.status === 200){
-                alert('Article approve successfully')
+                toast.success('Article approved successfully');
                 setArticles(articles.filter(article => article._id !== articleId));
             }
         }catch (error) {
             console.error('Error approving article:', error);
+            toast.error('Error approving article.');
             setError('Error approving article.');
         }
     }
@@ -142,6 +147,18 @@ const ModeratorQueue: React.FC = () => {
             ) : (
                 <p>No articles in the moderation queue.</p>
             )}
+
+            <ToastContainer
+                position="top-right"
+                autoClose={8000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

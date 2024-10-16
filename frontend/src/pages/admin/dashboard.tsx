@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SortableTable from "@/components/SortableTable"; // Import for SortableTable component
 import Link from "next/link"; // Next.js Link component for client-side routing
 
@@ -28,6 +30,7 @@ const addRole = async (role: Role) => {
     const response = await axios.post(`${API_URL}/roles`, role); // API call to add a new role
     return response.data; // Return the response data
   } catch (error) {
+    toast.error('Failed to add role.');
     throw error; // Throw error if something goes wrong
   }
 };
@@ -38,6 +41,7 @@ const deleteRole = async (email: string) => {
     const response = await axios.delete(`${API_URL}/roles/${email}`); // API call to delete the role
     return response.data; // Return the response data
   } catch (error) {
+    toast.error('Failed to delete role.');
     throw error; // Throw error if something goes wrong
   }
 };
@@ -48,6 +52,7 @@ const getAllRoles = async () => {
     const response = await axios.get(`${API_URL}/roles`); // API call to fetch all roles
     return response.data; // Return the response data
   } catch (error) {
+    toast.error('Failed to fetch roles.');
     throw error; // Throw error if something goes wrong
   }
 };
@@ -69,6 +74,7 @@ const AdminDashboard = () => {
       console.log(data); // Log the data for debugging
       setEmails(data); // Update state with fetched roles
     } catch (error) {
+      toast.error('Failed to fetch emails.');
       console.error('Error fetching emails:', error); // Log error if something goes wrong
     }
   };
@@ -81,6 +87,7 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Error fetching articles.', error); // Log error if something goes wrong
       setError('Error fetching articles.'); // Set error state
+      toast.error('Failed to fetch articles.'); 
     } finally {
       setIsLoading(false); // Set loading state to false when the request completes
     }
@@ -110,8 +117,10 @@ const AdminDashboard = () => {
       };
       await addRole(role); // Call the addRole function to send the API request
       setNewEmail(''); // Reset the email input field after adding
+      toast.success('Email added successfully.'); // Show success message
       fetchRoles(); // Refresh the roles list
     } catch (error) {
+      toast.error('Failed to add email.');
       console.error('Error adding email:', error); // Log error if something goes wrong
     }
   };
@@ -121,7 +130,9 @@ const AdminDashboard = () => {
     try {
       await deleteRole(email); // Call the deleteRole function to send the API request
       fetchRoles(); // Refresh the roles list
+      toast.success('Email deleted successfully.'); // Show success message
     } catch (error) {
+      toast.error('Failed to delete email.');
       console.error('Error deleting email:', error); // Log error if something goes wrong
     }
   };
@@ -153,7 +164,10 @@ const AdminDashboard = () => {
     <div className="container" style={{ padding: '20px' }}>
       <h1>Admin Dashboard</h1>
 
+      <h2 style={{ textAlign: 'left' }}>Analyst and Moderator Emails</h2>
+
       {/* Input form to add a new email and role */}
+      <h3 style={{ textAlign: 'left' }}>Add a new Moderator or Analyst</h3>
       <div style={{ marginBottom: '20px' }}>
         <input
           type="email"
@@ -179,12 +193,12 @@ const AdminDashboard = () => {
       </div>
 
       {/* Display the roles in a table */}
+      <h3 style={{ textAlign: 'left' }}>Moderators & Analysts</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
             <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>Email</th>
             <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>Role</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -192,7 +206,7 @@ const AdminDashboard = () => {
             <tr key={email.email}>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{email.email}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{email.role}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+              <td style={{ padding: '8px' }}>
                 <button
                   onClick={() => handleDeleteEmail(email.email)} // Handle delete button click
                   style={{ padding: '4px 8px', backgroundColor: '#dc3545', color: '#fff', border: 'none', cursor: 'pointer' }}
@@ -211,10 +225,25 @@ const AdminDashboard = () => {
       ) : error ? (
         <p>{error}</p>
       ) : articles.length > 0 ? (
-        <SortableTable headers={headers} data={tableData} /> // Show table with articles
+        <div>
+          <h3 style={{ textAlign: 'left' }}>All articles</h3>
+          <SortableTable headers={headers} data={tableData} /> {/* Show table with articles */}
+        </div>
       ) : (
         <p>No articles available</p> // Show message if no articles are available
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

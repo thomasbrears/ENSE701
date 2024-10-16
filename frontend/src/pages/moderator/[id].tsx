@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from "../../styles/ArticleDetails.module.scss";
 import fromStyles from "../../styles/Forms.module.scss";
 
@@ -40,6 +42,7 @@ const ArticleDetails: React.FC = () => {
           setArticle(response.data);
         } catch (error) {
           console.error('Error fetching article details:', error);
+          toast.error('Failed to load article details.');
           setError('Error fetching article details.');
         }
       };
@@ -86,6 +89,18 @@ const ArticleDetails: React.FC = () => {
 
       <br />
       <button className={fromStyles.addButton} onClick={() => router.back()}>Back to Dashboard</button>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

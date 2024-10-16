@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import SortableTable from '@/components/SortableTable'; // Adjust the path
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Article {
   _id: string;
@@ -26,6 +28,7 @@ const AdminDashboard: React.FC = () => {
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles for analysis:', error);
+        toast.error('Failed to load articles for analysis.');
         setError('Error fetching articles for analysis.');
       } finally {
         setIsLoading(false);
@@ -75,6 +78,18 @@ const AdminDashboard: React.FC = () => {
       ) : (
         <p>No articles required for analysis.</p>
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import { FormEvent, useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import formStyles from "../../styles/Forms.module.scss";
 
 const API_URL = process.env.NODE_ENV === 'production'
@@ -13,6 +15,9 @@ const NewDiscussion = () => {
   const [journal, setJournal] = useState("");
   const [sePractice, setSePractice] = useState("");
   const [claim, setClaim] = useState("");
+  const [evidence, setEvidence] = useState("");
+  const [showClaimField, setShowClaimField] = useState(false); // Toggle state for claim
+  const [showEvidenceField, setShowEvidenceField] = useState(false); // Toggle state for evidence
   const [researchType, setResearchType] = useState("");
   const [doi, setDoi] = useState("");
   const [summary, setSummary] = useState("");
@@ -34,6 +39,7 @@ const NewDiscussion = () => {
         journal,
         se_practice: sePractice,
         claim,
+        evidence,
         research_type: researchType,
         doi,
         summary,
@@ -51,7 +57,7 @@ const NewDiscussion = () => {
         setSubmissionId(response.data.submissionId); // Store submission ID
 
         // Display success message with the submission ID
-        alert(`Article submitted successfully! Your submission ID is: ${response.data.submissionId}`);
+        toast.success(`Article submitted successfully! Your submission ID is: ${response.data.submissionId}`);
 
         // Clear the form after successful submission
         setTitle("");
@@ -60,6 +66,7 @@ const NewDiscussion = () => {
         setJournal("");
         setSePractice("");
         setClaim("");
+        setEvidence("");
         setResearchType("");
         setDoi("");
         setSummary("");
@@ -71,7 +78,7 @@ const NewDiscussion = () => {
       }
     } catch (error) {
       console.error("Error submitting article:", error);
-      alert("Failed to submit the article. Please try again.");
+      toast.error("Failed to submit the article. Please try again.");
     }
   };
 
@@ -80,6 +87,10 @@ const NewDiscussion = () => {
   const updateAuthor = (index: number, value: string) => {
     setAuthors(authors.map((author, i) => (i === index ? value : author)));
   };
+
+  // Toggle functions for claim and evidence fields
+  const toggleClaimField = () => setShowClaimField(!showClaimField);
+  const toggleEvidenceField = () => setShowEvidenceField(!showEvidenceField);
 
   return (
     <div className={formStyles.container}>
@@ -91,7 +102,7 @@ const NewDiscussion = () => {
 
         <div className={formStyles.inlineGroup}>
           <div className={formStyles.inlineItem}>
-            <label htmlFor="userName">Your Name</label>
+            <label htmlFor="userName">Your Name*</label>
             <input
               type="text"
               id="userName"
@@ -103,7 +114,7 @@ const NewDiscussion = () => {
             />
           </div>
           <div className={formStyles.inlineItem}>
-            <label htmlFor="userEmail">Your Email</label>
+            <label htmlFor="userEmail">Your Email*</label>
             <input
               type="email"
               id="userEmail"
@@ -121,7 +132,7 @@ const NewDiscussion = () => {
         </p>
 
         <div className={formStyles.field}>
-          <label htmlFor="title">Title</label>
+          <label htmlFor="title">Title*</label>
           <input
             type="text"
             id="title"
@@ -133,7 +144,7 @@ const NewDiscussion = () => {
         </div>
 
         <div className={formStyles.field}>
-          <label>Authors</label>
+          <label>Authors*</label>
           {authors.map((author, index) => (
             <div key={index} className={formStyles.authorField}>
               <input
@@ -155,7 +166,7 @@ const NewDiscussion = () => {
         </div>
 
         <div className={formStyles.field}>
-          <label htmlFor="pubYear">Year of Publication</label>
+          <label htmlFor="pubYear">Year of Publication*</label>
           <input
             type="number"
             id="pubYear"
@@ -168,7 +179,7 @@ const NewDiscussion = () => {
         </div>
 
         <div className={formStyles.field}>
-          <label htmlFor="journal">Journal/Conference Name</label>
+          <label htmlFor="journal">Journal/Conference Name*</label>
           <input
             type="text"
             id="journal"
@@ -217,7 +228,7 @@ const NewDiscussion = () => {
         </div>
 
         <div className={formStyles.field}>
-          <label htmlFor="doi">DOI</label>
+          <label htmlFor="doi">DOI*</label>
           <input
             type="text"
             id="doi"
@@ -229,7 +240,7 @@ const NewDiscussion = () => {
         </div>
 
         <div className={formStyles.field}>
-          <label htmlFor="sePractice">SE Practice</label>
+          <label htmlFor="sePractice">SE Practice*</label>
           <input
             type="text"
             id="sePractice"
@@ -242,19 +253,7 @@ const NewDiscussion = () => {
         </div>
 
         <div className={formStyles.field}>
-          <label htmlFor="claim">Claim</label>
-          <textarea
-            id="claim"
-            value={claim}
-            onChange={(e) => setClaim(e.target.value)}
-            placeholder="State the claim made in the article"
-            required
-            className={`${formStyles.input} ${formStyles.longTextField}`}
-          />
-        </div>
-
-        <div className={formStyles.field}>
-          <label htmlFor="researchType">Type of Research</label>
+          <label htmlFor="researchType">Type of Research*</label>
           <select
             id="researchType"
             value={researchType}
@@ -271,8 +270,56 @@ const NewDiscussion = () => {
           </select>
         </div>
 
+        {/* Conditionally render the Claim field */}
+        {showClaimField && (
+          <div className={formStyles.field}>
+            <label htmlFor="claim">Claim</label>
+            <textarea
+              id="claim"
+              value={claim}
+              onChange={(e) => setClaim(e.target.value)}
+              placeholder="State the claim made in the article"
+              className={`${formStyles.input} ${formStyles.longTextField}`}
+            />
+          </div>
+        )}
+
+        {/* Button to toggle the claim field */}        
+        <button type="button" className={formStyles.addButton} onClick={toggleClaimField}
+        > {showClaimField ? 'Hide Claim' : 'Add Claim'} </button>
+
+        {/* Conditionally render the Evidence field */}
+        {showEvidenceField && (
+          <div className={formStyles.field}>
+            <label htmlFor="evidence">Evidence</label>
+            <textarea
+              id="evidence"
+              value={evidence}
+              onChange={(e) => setEvidence(e.target.value)}
+              placeholder="Provide evidence for the claim"
+              className={`${formStyles.input} ${formStyles.longTextField}`}
+            />
+          </div>
+        )}
+        
+        {/* Button to toggle the Evidence field */}
+        <button type="button" className={formStyles.addButton} onClick={toggleEvidenceField}
+        > {showEvidenceField ? 'Hide Evidence' : 'Add Evidence'} </button>
+
+        {/*<div className={formStyles.field}>
+          <label htmlFor="claim">Claim</label>
+          <textarea
+            id="claim"
+            value={claim}
+            onChange={(e) => setClaim(e.target.value)}
+            placeholder="State the claim made in the article"
+            required
+            className={`${formStyles.input} ${formStyles.longTextField}`}
+          />
+        </div>*/}
+
         <div className={formStyles.field}>
-          <label htmlFor="summary">Summary</label>
+          <label htmlFor="summary">Summary*</label>
           <textarea
             id="summary"
             value={summary}
@@ -297,6 +344,19 @@ const NewDiscussion = () => {
           Your article submission ID is <strong>{submissionId}</strong></p>
         </div>
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
     </div>
   );
 };
