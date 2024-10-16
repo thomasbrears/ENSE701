@@ -35,6 +35,7 @@ const ArticleDetails: React.FC = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [evidence, setEvidence] = useState<string>(''); // Evidence state
   const [analysisNotes, setAnalysisNotes] = useState<string>(''); // Analysis notes state
+  const [claim, setClaim] = useState<string>(''); // Claim state
   const [evidenceSummary, setEvidenceSummary] = useState<'Weak' | 'Moderate' | 'Strong' | null>(null); // New state
   const [error, setError] = useState<string | null>(null); // Error state
   const [activeEditField, setActiveEditField] = useState<string | null>(null); // Track the active editing field
@@ -47,6 +48,7 @@ const ArticleDetails: React.FC = () => {
           setArticle(response.data);
           setEvidence(response.data.evidence || ''); // Initialize evidence state
           setAnalysisNotes(response.data.analysis_notes || ''); // Initialize analysis notes state
+          setClaim(response.data.claim || ''); // Initialize claim state
           setEvidenceSummary(response.data.evidence_summary || null); // Initialize evidence summary state
         } catch (error) {
           console.error('Error fetching article details:', error);
@@ -106,6 +108,28 @@ const ArticleDetails: React.FC = () => {
     }
   };
 
+  const handleSaveClaim = async () => {
+    if (!article) return;
+    try {
+      // Save the updated claim
+      const response = await axios.post(`${API_URL}/analysis/articles/${article._id}/claim`, {
+        claim,
+      });
+      if (response.status === 200 || response.status === 201) {
+        setActiveEditField(null); // Exit edit mode after saving
+        toast.success('Claim updated successfully.');
+
+        // Update the article data with the new claim
+        setArticle({ ...article, claim });
+      } else {
+        toast.error('Error: Failed to update claim.');
+      }
+    } catch (error) {
+      console.error('Error updating claim:', error);
+      toast.error('Error updating claim.');
+    }
+  };
+
   const handleApprove = async () => {
     if (!article) return;
 
@@ -135,7 +159,7 @@ const ArticleDetails: React.FC = () => {
       await axios.post(`${API_URL}/analysis/articles/${article._id}/approve`, approvalData);
 
       toast.success('Article approved and published.', {
-        autoClose: 1000, // Display the toast for 3 seconds
+        autoClose: 1000, // Display the toast for 1 second
         onClose: () => {
           // Navigate back after the toast is closed
           router.back();
@@ -144,7 +168,7 @@ const ArticleDetails: React.FC = () => {
     } catch (error) {
       console.error('Error approving article:', error);
       toast.error('Error approving article.', {
-        autoClose: 5000,
+        autoClose: 3000,
       });
     }
   };
@@ -162,7 +186,7 @@ const ArticleDetails: React.FC = () => {
     } catch (error) {
       console.error('Error rejecting article:', error);
       toast.error('Error rejecting article.', {
-        autoClose: 5000,
+        autoClose: 3000,
       });
     }
   };
@@ -197,7 +221,25 @@ const ArticleDetails: React.FC = () => {
       <p className={styles.text}>{article.summary}</p>
 
       <p className={formStyles.sectionSeparator}><span>Claim</span></p>
-      <p className={styles.text}>{article.claim || 'No claim available'}</p>
+
+      {activeEditField === 'claim' ? (
+        <textarea
+          className={styles.input}
+          value={claim}
+          onChange={(e) => setClaim(e.target.value)}
+          placeholder="Enter the claim"
+          rows={5}
+          cols={50}
+        ></textarea>
+      ) : (
+        <p className={styles.text}>{article.claim || 'No claim available'}</p>
+      )}
+
+      {activeEditField === 'claim' ? (
+        <button className={formStyles.addButton} onClick={handleSaveClaim}>Save Claim</button>
+      ) : (
+        <button className={formStyles.addButton} onClick={() => handleEdit('claim')}>Edit Claim</button>
+      )}
 
       <p className={formStyles.sectionSeparator}><span>Evidence of the Claim</span></p>
 
