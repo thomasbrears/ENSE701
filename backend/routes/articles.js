@@ -27,7 +27,6 @@ router.get('/rejected', async (req, res) => {
   }
 });
 
-
 router.post("/edit", async (req, res) => {
   console.log("POST /api/articles/edit - Edit an article");
   try {
