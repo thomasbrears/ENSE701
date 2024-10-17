@@ -7,6 +7,7 @@ import { FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Loading from '../../components/Loading';
+import { useTheme } from "@/context/ThemeContext";
 
 // Define the expected structure of an article
 interface Article {
@@ -29,6 +30,7 @@ const LookupSubmission = () => {
   const [error, setError] = useState(""); // handle error message state
   const router = useRouter(); // Next.js router
   const [loading, setLoading] = useState(false); // State for loading indicator
+  const { theme } = useTheme(); // Get the current theme for dark/light mode
 
   // Function to return user-friendly status messages
   const getStatusMessage = (status: string) => {
@@ -57,7 +59,7 @@ const LookupSubmission = () => {
     });
   };
 
-  // Function to get the correct date based on the articles status and format it
+  // Function to get the correct date based on the article's status and format it
   const getDate = (article: Article) => {
     if (article.status === 'published') return formatDate(article.analyzed_at); // published date
     if (article.status === 'approved_by_moderator') return formatDate(article.moderated_at); // moderated date
@@ -147,7 +149,7 @@ const LookupSubmission = () => {
   }, [router.query]); // re-run when query changes
 
   return (
-    <div className={formStyles.container}>
+    <div className={theme === 'dark' ? `${formStyles.container} ${formStyles.darkModeContainer}` : formStyles.container}>
       {loading && <Loading />} {/* Loading message */}
 
       <h1 className={formStyles.header}>Track My Submissions</h1>
@@ -161,11 +163,11 @@ const LookupSubmission = () => {
           onChange={(e) => setInput(e.target.value)} // update input state
           placeholder="Please enter your email or submission ID"
           aria-label="Search submissions by email or ID"
-          className={formStyles.inputField}
+          className={theme === 'dark' ? `${formStyles.inputField} ${formStyles.inputFieldDark}` : formStyles.inputField} // Dark mode for input
           onKeyPress={handleKeyPress} // enter to search
         />
         <FaSearch
-          className={formStyles.searchIcon}
+          className={theme === 'dark' ? `${formStyles.searchIcon} ${formStyles.searchIconDark}` : formStyles.searchIcon} // Dark mode for search icon
           onClick={() => handleLookup()} // search on click
           style={{ cursor: 'pointer' }}
         />
@@ -184,10 +186,10 @@ const LookupSubmission = () => {
               <p><strong>Status:</strong> {getStatusMessage(article.status)}</p>
               <p><strong>{article.status === 'published' ? 'Published On' : article.status === 'approved_by_moderator' ? 'Moderated On' : 'Submitted On'}:</strong> {getDate(article)}</p>
 
-              {/* Show link to article if its published */}
+              {/* Show link to article if it's published */}
               {article.status === 'published' && (
                 <p><Link href={`/articles/${article._id}`} legacyBehavior>
-                    <a>View Publised Article</a>
+                    <a>View Published Article</a>
                    </Link>
                 </p>
               )}
