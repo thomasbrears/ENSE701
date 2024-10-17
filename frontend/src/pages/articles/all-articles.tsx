@@ -1,11 +1,11 @@
-import { NextPage } from "next";
-import axios from "axios";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
+import axios from "axios";
+import Link from "next/link";
 import 'react-toastify/dist/ReactToastify.css';
 import SortableTable from "../../components/SortableTable";
 import SearchBar from "../../components/SearchBar";
+import ColumnCustomizationMenu from "../../components/ColumnCustomizationMenu";
 
 interface ArticlesInterface {
   id: string;
@@ -22,11 +22,23 @@ const API_URL = process.env.NODE_ENV === 'production'
   ? 'https://ense701-g6.vercel.app/api'
   : 'http://localhost:8000/api';
 
-const AllArticles: NextPage = () => {
+const AllArticles = () => {
   const [articles, setArticles] = useState<ArticlesInterface[]>([]);
   const [searchResults, setSearchResults] = useState<ArticlesInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Column customization state
+  const availableColumns = [
+    { key: "title", label: "Title" },
+    { key: "authors", label: "Authors" },
+    { key: "pubyear", label: "Publication Year" },
+    { key: "journal", label: "Journal/Conference" },
+    { key: "se_practice", label: "SE Practice" },
+    { key: "research_type", label: "Research Type" },
+    { key: "doi", label: "Source" },
+  ];
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(availableColumns.map(col => col.key));
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -77,17 +89,6 @@ const AllArticles: NextPage = () => {
     setSearchResults(filteredArticles);
   };
 
-  const headers: { key: keyof ArticlesInterface | "actions"; label: string }[] = [
-    { key: "title", label: "Title" },
-    { key: "authors", label: "Authors" },
-    { key: "pubyear", label: "Publication Year" },
-    { key: "journal", label: "Journal/Conference" },
-    { key: "se_practice", label: "SE Practice" },
-    { key: "research_type", label: "Research Type" },
-    { key: "doi", label: "Source" },
-    { key: "actions", label: "" },
-  ];
-
   const tableData = searchResults.map((article) => ({
     ...article,
     actions: (
@@ -111,14 +112,20 @@ const AllArticles: NextPage = () => {
   return (
     <div>
       <div className="container">
-        
         <SearchBar onSearch={handleSearch} />
+        
+        <ColumnCustomizationMenu
+          availableColumns={availableColumns}
+          selectedColumns={selectedColumns}
+          onColumnChange={setSelectedColumns}
+        />
+        
         {isLoading ? (
           <p>Loading articles...</p>
         ) : error ? (
           <p>{error}</p>
         ) : searchResults.length > 0 ? (
-          <SortableTable headers={headers} data={tableData} />
+          <SortableTable headers={availableColumns.filter(col => selectedColumns.includes(col.key))} data={tableData} />
         ) : (
           <p>No results found.</p>
         )}
