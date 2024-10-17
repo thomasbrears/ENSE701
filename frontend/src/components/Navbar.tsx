@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { IoMdArrowDropdown } from "react-icons/io";
 import styles from "../styles/Nav.module.scss";
+import { useTheme } from "../context/ThemeContext"; // Import the theme context
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const { theme } = useTheme(); // Get the current theme
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <div className={styles.navbarContainer}>
-      <nav className={styles.navbar}>
+    <div className={theme === "dark" ? `${styles.navbarContainer} ${styles.navbarContainerDark}` : styles.navbarContainer}>
+      <nav className={theme === "dark" ? `${styles.navbar} ${styles.navbarDark}` : styles.navbar}>
         {/* Main Title */}
-        <Link href="/" className={styles.title}>
+        <Link href="/" className={theme === "dark" ? `${styles.title} ${styles.titleDark}` : styles.title}>
           SPEED
         </Link>
 
@@ -26,34 +26,22 @@ const NavBar = () => {
         </div>
 
         {/* Nav Links */}
-        <div className={`${styles.navLinks} ${isOpen ? styles.show : ""}`}>
-          <NavItem route="/articles/all-articles">Articles</NavItem>
-          <NavItem route="/articles/create-article">New Article</NavItem>
-          <NavItem route="/articles/lookup-submission">Lookup Submission</NavItem>
-
-          {/* Admin Dropdown
-          <div className={styles.adminDropdown}>
-            <NavItem dropdown>
-              Admin <IoMdArrowDropdown />
-            </NavItem>
-            <div className={styles.adminDropdownContent}>
-              <NavItem route="/admin/dashboard">Dashboard</NavItem>
-              <NavItem route="/admin/rejected-articles">Rejected Articles</NavItem>
-            </div>
-          </div>*/}
+        <div className={`${styles.navLinks} ${isOpen ? styles.show : ""} ${theme === "dark" ? styles.navLinksDark : ""}`}>
+          <NavItem route="/articles/all-articles" darkMode={theme === "dark"}>Articles</NavItem>
+          <NavItem route="/articles/create-article" darkMode={theme === "dark"}>New Article</NavItem>
+          <NavItem route="/articles/lookup-submission" darkMode={theme === "dark"}>Lookup Submission</NavItem>
 
           {/* Admin Dashboard */}
-          <NavItem route="/admin/dashboard">Admin</NavItem>
+          <NavItem route="/admin/dashboard" darkMode={theme === "dark"}>Admin</NavItem>
 
           {/* Rejected Articles */}
-          <NavItem route="/admin/rejected-articles">Rejected Articles</NavItem>
+          <NavItem route="/admin/rejected-articles" darkMode={theme === "dark"}>Rejected Articles</NavItem>
 
           {/* Moderator Dashboard */}
-          <NavItem route="/moderator/ModeratorQueue">Moderator</NavItem>
+          <NavItem route="/moderator/ModeratorQueue" darkMode={theme === "dark"}>Moderator</NavItem>
 
           {/* Analyst Dashboard */}
-          <NavItem route="/analyst/analyst-dashboard">Analyst</NavItem>
-
+          <NavItem route="/analyst/analyst-dashboard" darkMode={theme === "dark"}>Analyst</NavItem>
         </div>
       </nav>
     </div>
@@ -64,13 +52,13 @@ const NavBar = () => {
 const NavItem = ({
   children,
   route,
-  dropdown,
+  darkMode,
   style,
   onClick,
 }: {
   children: React.ReactNode;
   route?: string;
-  dropdown?: boolean;
+  darkMode?: boolean;
   style?: React.CSSProperties;
   onClick?: () => void;
 }) => {
@@ -86,7 +74,7 @@ const NavItem = ({
   return (
     <div
       style={style}
-      className={`${styles.navitem} ${dropdown ? styles.dropdown : ""}`}
+      className={`${darkMode ? styles.navitemDark : styles.navitem}`}
       onClick={onClick ? onClick : navigate}
     >
       {children}

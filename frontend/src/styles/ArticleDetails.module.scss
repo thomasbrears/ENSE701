@@ -1,67 +1,92 @@
+/* ***------ Light Mode ------*** */
+//default: light mode
+//check global for default colour vairables
+
 .container {
-    max-width: 800px;
-    margin: 3em auto;
-    padding: 1.5em;
-    background-color: #ffffff; // White
-  }
+  max-width: 800px;
+  margin: 3em auto;
+  padding: 1.5em;
+  background-color: var(--background-color); //css variable declared in globals
+  color: var(--text-color); //css variable declared in globals
+  border-radius: 10px;
+}
 
-  .title {
-    font-size: 2em;
-    font-weight: 700; // Bold weight
-    margin-bottom: 0.5em;
-    text-align: center;
-    line-height: 1.2;
-    color: #006400; // green
-  }
+.title {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+  text-align: center;
+  line-height: 1.2;
+  color: #006400; //green colour for title
+}
 
-  .divider {
-    height: 2px;
-    background-color: #000; // Black
-    width: 100%;
-    margin: 0.5em 0 1em;
-  }
-  .subtitle {
-      font-size: 1em;
-      font-weight: 400;
-      color: #000; // Black
-      margin-bottom: 1em;
-      text-align: center;
-    }
+.divider {
+  height: 2px;
+  background-color: #000; 
+  width: 100%;
+  margin: 0.5em 0 1em;
+}
 
-  .section {
-    margin-top: 1.5em;
-  }
+.subtitle {
+  font-size: 1em;
+  font-weight: 400;
+  color: var(--text-color); 
+  margin-bottom: 1em;
+  text-align: center;
+}
 
-  .sectionTitle {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #333;
-    text-align: left;
-  }
+.section {
+  margin-top: 1.5em;
+}
 
-  .text {
-    font-size: 1em;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 1em;
-    white-space: pre-wrap;
-  }
+.sectionTitle {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #333; 
+  text-align: left;
+}
 
-  .input {
-    font-size: 1em;
-    font-family: 'Roboto', sans-serif;
-    color: #333;
-    line-height: 1.6;
-    margin-bottom: 1em;
-    width: 95%;
-    border-radius: 10px;
-    min-height: 100px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    padding: 20px;
-  }
+.text {
+  font-size: 1em;
+  color: var(--text-color); 
+  line-height: 1.6;
+  margin-bottom: 1em;
+  white-space: pre-wrap;
+}
 
-  .input:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
-    outline: none;
-  }
+.input {
+  font-size: 1em;
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color); 
+  line-height: 1.6;
+  margin-bottom: 1em;
+  width: 95%;
+  border-radius: 10px;
+  min-height: 100px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+  background-color: var(--background-color); 
+}
+
+.input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  outline: none;
+}
+
+/* ***------ Dark Mode Styles ------*** */
+body.dark-mode .container {
+  background-color: #333333 !important; 
+}
+
+body.dark-mode .sectionTitle,
+body.dark-mode .subtitle,
+body.dark-mode h2.sectionTitle,
+body.dark-mode .text,
+body.dark-mode p {
+  color: #ffffff !important; 
+}
+
+body.dark-mode .divider {
+  background-color: #ffffff !important; 
+}

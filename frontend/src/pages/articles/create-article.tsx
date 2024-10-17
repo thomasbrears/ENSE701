@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import formStyles from "../../styles/Forms.module.scss";
+import { useTheme } from "@/context/ThemeContext"; 
 
 const API_URL = process.env.NODE_ENV === 'production'
   ? 'https://ense701-g6.vercel.app/api'
@@ -27,6 +28,8 @@ const NewDiscussion = () => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [submissionId, setSubmissionId] = useState<string | null>(null);
+
+  const { theme } = useTheme(); // Get the current theme from ThemeContext
 
   const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -93,7 +96,7 @@ const NewDiscussion = () => {
   const toggleEvidenceField = () => setShowEvidenceField(!showEvidenceField);
 
   return (
-    <div className={formStyles.container}>
+    <div className={theme === 'dark' ? `${formStyles.container} ${formStyles.darkModeContainer}` : formStyles.container}>
       <h1 className={formStyles.header}>Submit a New Article</h1>
       <form className={formStyles.form} onSubmit={submitNewArticle}>
         <p className={formStyles.sectionSeparator}>
@@ -107,7 +110,7 @@ const NewDiscussion = () => {
               type="text"
               id="userName"
               value={userName}
-              className={formStyles.input}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Enter your name"
               required
@@ -119,7 +122,7 @@ const NewDiscussion = () => {
               type="email"
               id="userEmail"
               value={userEmail}
-              className={formStyles.input}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
               onChange={(e) => setUserEmail(e.target.value)}
               placeholder="Enter your email"
               required
@@ -140,6 +143,7 @@ const NewDiscussion = () => {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter the article title"
             required
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
           />
         </div>
 
@@ -153,7 +157,7 @@ const NewDiscussion = () => {
                 onChange={(e) => updateAuthor(index, e.target.value)}
                 placeholder={`Author ${index + 1}`}
                 required
-                className={formStyles.input}
+                className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
               />
               <button type="button" onClick={() => removeAuthor(index)} className={formStyles.removeButton}>
                 Remove
@@ -174,7 +178,7 @@ const NewDiscussion = () => {
             onChange={(e) => setPubYear(e.target.value)}
             placeholder="e.g., 2021"
             required
-            className={formStyles.input}
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
           />
         </div>
 
@@ -187,7 +191,7 @@ const NewDiscussion = () => {
             onChange={(e) => setJournal(e.target.value)}
             placeholder="Enter the journal or conference name"
             required
-            className={formStyles.input}
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
           />
         </div>
 
@@ -200,7 +204,7 @@ const NewDiscussion = () => {
               value={volume}
               onChange={(e) => setVolume(e.target.value)}
               placeholder="e.g., 34"
-              className={`${formStyles.input} ${formStyles.shortTextField}`}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark} ${formStyles.shortTextField}` : `${formStyles.input} ${formStyles.shortTextField}`} // Add dark mode class
             />
           </div>
           <div className={formStyles.inlineItem}>
@@ -211,7 +215,7 @@ const NewDiscussion = () => {
               value={number}
               onChange={(e) => setNumber(e.target.value)}
               placeholder="e.g., 2"
-              className={`${formStyles.input} ${formStyles.shortTextField}`}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark} ${formStyles.shortTextField}` : `${formStyles.input} ${formStyles.shortTextField}`} // Add dark mode class
             />
           </div>
           <div className={formStyles.inlineItem}>
@@ -222,7 +226,7 @@ const NewDiscussion = () => {
               value={pages}
               onChange={(e) => setPages(e.target.value)}
               placeholder="e.g., 123-145"
-              className={`${formStyles.input} ${formStyles.shortTextField}`}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark} ${formStyles.shortTextField}` : `${formStyles.input} ${formStyles.shortTextField}`} // Add dark mode class
             />
           </div>
         </div>
@@ -235,7 +239,7 @@ const NewDiscussion = () => {
             value={doi}
             onChange={(e) => setDoi(e.target.value)}
             placeholder="Enter the DOI"
-            className={formStyles.input}
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
           />
         </div>
 
@@ -248,7 +252,7 @@ const NewDiscussion = () => {
             onChange={(e) => setSePractice(e.target.value)}
             placeholder="e.g., Test-Driven Development"
             required
-            className={formStyles.input}
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
           />
         </div>
 
@@ -259,7 +263,7 @@ const NewDiscussion = () => {
             value={researchType}
             onChange={(e) => setResearchType(e.target.value)}
             required
-            className={formStyles.input}
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark}` : formStyles.input} // Add dark mode class
           >
             <option value="">Select a research type</option>
             <option value="case study">Case Study</option>
@@ -279,7 +283,7 @@ const NewDiscussion = () => {
               value={claim}
               onChange={(e) => setClaim(e.target.value)}
               placeholder="State the claim made in the article"
-              className={`${formStyles.input} ${formStyles.longTextField}`}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark} ${formStyles.longTextField}` : `${formStyles.input} ${formStyles.longTextField}`} // Add dark mode class
             />
           </div>
         )}
@@ -297,7 +301,7 @@ const NewDiscussion = () => {
               value={evidence}
               onChange={(e) => setEvidence(e.target.value)}
               placeholder="Provide evidence for the claim"
-              className={`${formStyles.input} ${formStyles.longTextField}`}
+              className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark} ${formStyles.longTextField}` : `${formStyles.input} ${formStyles.longTextField}`} // Add dark mode class
             />
           </div>
         )}
@@ -305,18 +309,6 @@ const NewDiscussion = () => {
         {/* Button to toggle the Evidence field */}
         <button type="button" className={formStyles.addButton} onClick={toggleEvidenceField}
         > {showEvidenceField ? 'Hide Evidence' : 'Add Evidence'} </button>
-
-        {/*<div className={formStyles.field}>
-          <label htmlFor="claim">Claim</label>
-          <textarea
-            id="claim"
-            value={claim}
-            onChange={(e) => setClaim(e.target.value)}
-            placeholder="State the claim made in the article"
-            required
-            className={`${formStyles.input} ${formStyles.longTextField}`}
-          />
-        </div>*/}
 
         <div className={formStyles.field}>
           <label htmlFor="summary">Summary*</label>
@@ -326,7 +318,7 @@ const NewDiscussion = () => {
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Provide a brief summary of the article"
             required
-            className={`${formStyles.input} ${formStyles.longTextField}`}
+            className={theme === 'dark' ? `${formStyles.input} ${formStyles.inputFieldDark} ${formStyles.longTextField}` : `${formStyles.input} ${formStyles.longTextField}`} // Add dark mode class
           />
         </div>
 
@@ -339,7 +331,7 @@ const NewDiscussion = () => {
       {submissionId && (
         <div className={formStyles.submissionId}>
           <h3 style={{ textAlign: 'left' }}>Article Submitted Successfully</h3>
-          <p>Thank you for submiting an article to the SPEED database! <br />
+          <p>Thank you for submitting an article to the SPEED database! <br />
             Your submission will now be reviewed by our team and you will be advised when it is published <br />
             Your article submission ID is <strong>{submissionId}</strong></p>
         </div>
@@ -356,7 +348,6 @@ const NewDiscussion = () => {
         draggable
         pauseOnHover
       />
-
     </div>
   );
 };
