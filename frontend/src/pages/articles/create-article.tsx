@@ -76,9 +76,10 @@ const NewDiscussion = () => {
         setUserName("");
         setUserEmail("");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting article:", error);
-      toast.error("Failed to submit the article. Please try again.");
+      const message = error.response?.data?.message || "Failed to submit the article. Please try again.";
+      toast.error(message);
     }
   };
 
@@ -284,7 +285,7 @@ const NewDiscussion = () => {
           </div>
         )}
 
-        {/* Button to toggle the claim field */}        
+        {/* Button to toggle the claim field */}
         <button type="button" className={formStyles.addButton} onClick={toggleClaimField}
         > {showClaimField ? 'Hide Claim' : 'Add Claim'} </button>
 
@@ -301,7 +302,7 @@ const NewDiscussion = () => {
             />
           </div>
         )}
-        
+
         {/* Button to toggle the Evidence field */}
         <button type="button" className={formStyles.addButton} onClick={toggleEvidenceField}
         > {showEvidenceField ? 'Hide Evidence' : 'Add Evidence'} </button>
@@ -338,10 +339,10 @@ const NewDiscussion = () => {
       {/* Show the submission ID after successful submission */}
       {submissionId && (
         <div className={formStyles.submissionId}>
-          <h3 style={{ textAlign:'left' }}>Article Submitted Successfully</h3>
+          <h3 style={{ textAlign: 'left' }}>Article Submitted Successfully</h3>
           <p>Thank you for submiting an article to the SPEED database! <br />
-          Your submission will now be reviewed by our team and you will be advised when it is published <br />
-          Your article submission ID is <strong>{submissionId}</strong></p>
+            Your submission will now be reviewed by our team and you will be advised when it is published <br />
+            Your article submission ID is <strong>{submissionId}</strong></p>
         </div>
       )}
 

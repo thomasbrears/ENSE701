@@ -61,6 +61,17 @@ router.post('/', async (req, res) => {
     const { title, authors, source, journal, se_practice, research_type, publication_year,
       volume, number, pages, doi, summary, claim, linked_discussion, user_name, user_email } = req.body;
 
+    const findArticles = await Article.find({
+      $or: [
+        { title: title },
+        { doi: doi }
+      ]
+    });
+
+    if (findArticles && findArticles.length > 0) {
+      return res.status(400).json({ message: 'Article already exists' });
+    }
+
     const newArticle = new Article({
       title,
       authors,
