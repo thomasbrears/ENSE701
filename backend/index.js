@@ -15,7 +15,19 @@ dotenv.config();
 const app = express();
 
 // CORS middleware to allow cross-origin requests (ORIGINAL - LOCAL)
-app.use(cors());
+//app.use(cors());
+
+// dynamic cors options
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://ense701-g6.vercel.app' 
+    : true,  // Allow all origins in development
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  credentials: true
+};
+
+// CORS middleware to allow cross-origin requests
+app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
