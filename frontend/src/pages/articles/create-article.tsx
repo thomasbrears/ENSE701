@@ -78,8 +78,7 @@ const NewDiscussion = () => {
       }
     } catch (error: any) {
       console.error("Error submitting article:", error);
-      const message = error.response?.data?.message || "Failed to submit the article. Please try again.";
-      toast.error(message);
+      toast.error("Failed to submit the article. Please try again.");
     }
   };
 

@@ -8,13 +8,13 @@ const router = express.Router();
 
 // GET /api/analyses/approved_by_moderator - Retrieve all articles approced by moderator
 router.get('/articles', async (req, res) => {
-  try {
-    const moderationQueue = await Article.find({ status: 'pending' });
-    res.status(200).json(moderationQueue);
-  } catch (error) {
-    console.error('Error retrieving approved analyses:', error);
-    res.status(500).json({ message: 'Error fetching approved analyses', error });
-  }
+    try {
+        const moderationQueue = await Article.find({ status: 'pending' });
+        res.status(200).json(moderationQueue);
+    } catch (error) {
+        console.error('Error retrieving approved analyses:', error);
+        res.status(500).json({ message: 'Error fetching approved analyses', error });
+    }
 });
 
 router.post('/articles/:id/approve', async (req, res) => {
@@ -49,7 +49,7 @@ router.post('/articles/:id/approve', async (req, res) => {
             );
         });
 
-        res.status(200).json({message: 'Article approved and sent to Analyst', article});
+        res.status(200).json({ message: 'Article approved and sent to Analyst', article });
     } catch (error) {
         console.error('Error approving the article:', error);
         res.status(500).json({ message: 'Error approving the article', error });
@@ -59,12 +59,17 @@ router.post('/articles/:id/approve', async (req, res) => {
 router.post('/articles/:id/reject', async (req, res) => {
     const articleId = req.params.id;
 
+    console.log("请求内容：", req.body);
+
+    const rejectionReason = req.body.rejection_reason || "No reason provided";
+
     try {
         const article = await Article.findByIdAndUpdate(
             articleId,
-            { status: 'rejected' },
+            { status: 'rejected', rejection_reason: rejectionReason },
             { new: true }
         );
+
         if (!article) return res.status(404).json({ message: 'Article not found' });
 
         const rejectionDate = moment().format('MMMM Do YYYY, h:mm:ss a'); // Format the date for the email
@@ -81,11 +86,11 @@ router.post('/articles/:id/reject', async (req, res) => {
             `
         );
 
-        res.status(200).json({message: 'Article rejected', article});
+        res.status(200).json({ message: 'Article rejected', article });
     } catch (error) {
         console.error('Error rejecting the article:', error);
         res.status(500).json({ message: 'Error rejecting the article', error });
     }
-    });
+});
 
 export default router;

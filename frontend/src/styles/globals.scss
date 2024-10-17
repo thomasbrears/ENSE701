@@ -53,3 +53,13 @@ button:hover {
   gap: 5px;
   font-size: 24px;
 }
+
+.fade-in {
+  opacity: 1; /* The opacity of the final state is 1. */
+  transition: opacity 0.3s ease-in-out; /* Animation time is 0.3 seconds. */
+}
+
+.fade-out {
+  opacity: 0; /* The opacity of the initial state is 0 */
+  transition: opacity 0.3s ease-in-out; /* Animation time is 0.3 seconds. */
+}

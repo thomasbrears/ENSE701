@@ -68,8 +68,10 @@ router.post('/', async (req, res) => {
       ]
     });
 
+    let repeat_flag = false;
     if (findArticles && findArticles.length > 0) {
-      return res.status(400).json({ message: 'Article already exists' });
+      // return res.status(400).json({ message: 'Article already exists' });
+      repeat_flag = true;
     }
 
     const newArticle = new Article({
@@ -89,7 +91,8 @@ router.post('/', async (req, res) => {
       linked_discussion,
       user_name,
       user_email,
-      status: 'pending', // Default status to pending
+      status: 'pending', // Default status to pending,
+      repeat_flag
     });
 
     const savedArticle = await newArticle.save(); // Save and store the result in savedArticle

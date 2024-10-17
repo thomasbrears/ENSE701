@@ -25,6 +25,7 @@ const articleSchema = new mongoose.Schema({
   moderated_at: { type: Date, default: Date.now },  // Timestamp when moderated
   analyzed_at: { type: Date, default: Date.now },  // Timestamp when analyzed
   repeat_flag: { type: Boolean, default: false },
+  rejection_reason: { type: String },
 });
 
 const Article = mongoose.model('Article', articleSchema);

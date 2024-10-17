@@ -10,6 +10,7 @@ interface Article {
   title: string;
   authors: string[];
   publication_year: number;
+  rejection_reason: string;
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
@@ -25,6 +26,7 @@ const AdminDashboard: React.FC = () => {
     const fetchArticles = async () => {
       try {
         const response = await axios.get(`${API_URL}/articles/rejected/`);
+        console.log(response.data);
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles for analysis:', error);
@@ -42,6 +44,7 @@ const AdminDashboard: React.FC = () => {
     { key: "title", label: "Title" },
     { key: "authors", label: "Authors" },
     { key: "publication_year", label: "Publication Year" },
+    { key: "rejection_reason", label: "Rejection Reason" },
     { key: 'actions', label: '' },
   ];
 
