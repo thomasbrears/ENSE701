@@ -21,6 +21,7 @@ interface Article {
   claim: string | null;
   evidence: string | null;
   summary: string;
+  rejection_reason: string;
 }
 
 const API_URL = process.env.NODE_ENV === 'production'
