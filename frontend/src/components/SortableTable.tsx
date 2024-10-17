@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../styles/SortableTable.module.scss";
 
 interface SortableTableProps {
-  headers: { key: string; label: string }[];
+  headers: { key: string; label: string,width?: string}[];
   data: any[];
 }
 
@@ -29,7 +29,10 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
       <thead>
         <tr>
           {headers.map((header) => (
-            <th key={header.key} onClick={() => handleSort(header.key)}>
+            <th 
+              key={header.key}
+              onClick={() => handleSort(header.key)}
+            >
               {header.label} {sortKey === header.key ? (sortDirection === "asc" ? "↑" : "↓") : ""}
             </th>
           ))}
@@ -39,7 +42,10 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
         {sortedData.map((row, i) => (
           <tr key={i}>
             {headers.map((header) => (
-              <td key={header.key} width={1}>{row[header.key]}</td>
+              <td  
+              key={header.key}
+              width={1}
+              >{row[header.key]}</td>
             ))}
           </tr>
         ))}

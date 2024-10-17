@@ -24,8 +24,8 @@ const Rating: React.FC<RatingProps> = ({ initialRating = 0, onChange, readonly =
         <span
           key={star}
           onClick={() => handleStarClick(star)}
-          onMouseEnter={() => setHover(star)}
-          onMouseLeave={() => setHover(null)}
+          // onMouseEnter={() => setHover(star)}
+          // onMouseLeave={() => setHover(null)}
           style={{ cursor: readonly ? 'default' : 'pointer' }}
         >
           {hover !== null && hover >= star ? (

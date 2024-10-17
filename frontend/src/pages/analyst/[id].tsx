@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styles from "../../styles/ArticleDetails.module.scss";
-import fromStyles from "../../styles/Forms.module.scss";
+import formStyles from "../../styles/Forms.module.scss";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Article {
   _id: string;
@@ -18,6 +20,8 @@ interface Article {
   doi: string;
   claim: string | null;
   evidence: string | null;
+  analysis_notes: string | null;
+  evidence_summary: 'Weak' | 'Moderate' | 'Strong' | null; // New field
   summary: string;
 }
 
@@ -30,10 +34,11 @@ const ArticleDetails: React.FC = () => {
   const { id } = router.query; // Get the article ID from the URL
   const [article, setArticle] = useState<Article | null>(null);
   const [evidence, setEvidence] = useState<string>(''); // Evidence state
-  const [message, setMessage] = useState<string>(''); // Message state
+  const [analysisNotes, setAnalysisNotes] = useState<string>(''); // Analysis notes state
+  const [claim, setClaim] = useState<string>(''); // Claim state
+  const [evidenceSummary, setEvidenceSummary] = useState<'Weak' | 'Moderate' | 'Strong' | null>(null); // New state
   const [error, setError] = useState<string | null>(null); // Error state
-  const [isEditing, setIsEditing] = useState(false); // Is editing state
-
+  const [activeEditField, setActiveEditField] = useState<string | null>(null); // Track the active editing field
   // Fetch article details on component mount
   useEffect(() => {
     if (id) {
@@ -42,47 +47,129 @@ const ArticleDetails: React.FC = () => {
           const response = await axios.get(`${API_URL}/articles/${id}`);
           setArticle(response.data);
           setEvidence(response.data.evidence || ''); // Initialize evidence state
+          setAnalysisNotes(response.data.analysis_notes || ''); // Initialize analysis notes state
+          setClaim(response.data.claim || ''); // Initialize claim state
+          setEvidenceSummary(response.data.evidence_summary || null); // Initialize evidence summary state
         } catch (error) {
           console.error('Error fetching article details:', error);
           setError('Error fetching article details.');
+          toast.error('Error fetching article details.');
         }
       };
       fetchArticle();
     }
   }, [id]);
 
-  const handleEdit = () => {
-    setIsEditing(true); // Enter edit mode
+  const handleEdit = (field: string) => {
+    setActiveEditField(field); // Set the active editing field
+  };
+
+  const handleSaveAnalysisNotes = async () => {
+    if (!article) return;
+    try {
+      // Save the updated analysis notes
+      const response = await axios.post(`${API_URL}/analysis/articles/${article._id}/analysis_notes`, {
+        analysis_notes: analysisNotes,
+      });
+      if (response.status === 200 || response.status === 201) {
+        setActiveEditField(null); // Exit edit mode after saving
+        toast.success('Analysis notes updated successfully.');
+
+        // Update the article data with the new analysis notes
+        setArticle({ ...article, analysis_notes: analysisNotes });
+      } else {
+        toast.error('Error: Failed to update analysis notes.');
+      }
+    } catch (error) {
+      console.error('Error updating analysis notes:', error);
+      toast.error('Error updating analysis notes.');
+    }
   };
 
   const handleSaveEvidence = async () => {
     if (!article) return;
     try {
       // Save the updated evidence
-      await axios.post(`${API_URL}/analysis/articles/${article._id}/evidence`, {
+      const response = await axios.post(`${API_URL}/analysis/articles/${article._id}/evidence`, {
         evidence,
       });
-      setMessage('Evidence updated successfully.');
-      setIsEditing(false); // Exit edit mode after saving
+      if (response.status === 200 || response.status === 201) {
+        setActiveEditField(null); // Exit edit mode after saving
+        toast.success('Evidence updated successfully.');
 
-      // Re-fetch the updated article to get the latest evidence
-      const response = await axios.get(`${API_URL}/articles/${article._id}`);
-      setArticle(response.data); // Update the article data with the new evidence
+        // Update the article data with the new evidence
+        setArticle({ ...article, evidence });
+      } else {
+        toast.error('Error: Failed to update evidence.');
+      }
     } catch (error) {
       console.error('Error updating evidence:', error);
-      setMessage('Error updating evidence.');
+      toast.error('Error updating evidence.');
+    }
+  };
+
+  const handleSaveClaim = async () => {
+    if (!article) return;
+    try {
+      // Save the updated claim
+      const response = await axios.post(`${API_URL}/analysis/articles/${article._id}/claim`, {
+        claim,
+      });
+      if (response.status === 200 || response.status === 201) {
+        setActiveEditField(null); // Exit edit mode after saving
+        toast.success('Claim updated successfully.');
+
+        // Update the article data with the new claim
+        setArticle({ ...article, claim });
+      } else {
+        toast.error('Error: Failed to update claim.');
+      }
+    } catch (error) {
+      console.error('Error updating claim:', error);
+      toast.error('Error updating claim.');
     }
   };
 
   const handleApprove = async () => {
     if (!article) return;
+
+    // Validation: Check if evidence summary is set
+    if (!evidenceSummary) {
+      toast.error('Please select an Evidence Summary before approving the article.', {
+        autoClose: 5000,
+      });
+      return;
+    }
+
+    // Validation: Check if analysis notes are set
+    if (!analysisNotes.trim()) {
+      toast.error('Please enter Analysis Notes before approving the article.', {
+        autoClose: 5000,
+      });
+      return;
+    }
+
     try {
-      await axios.post(`${API_URL}/analysis/articles/${article._id}/approve`);
-      setMessage('Article approved and published.');
-      router.back();
+      const approvalData = {
+        evidence,
+        analysis_notes: analysisNotes,
+        evidence_summary: evidenceSummary,
+      };
+
+      await axios.post(`${API_URL}/analysis/articles/${article._id}/approve`, approvalData);
+
+      toast.success('Article approved and published.', {
+        autoClose: 1000, // Display the toast for 1 second
+        onClose: () => {
+          // Navigate back after the toast is closed
+          router.back();
+        },
+      });
     } catch (error) {
       console.error('Error approving article:', error);
-      setMessage('Error approving article.');
+      toast.error('Error approving article.', {
+        autoClose: 3000,
+      });
     }
   };
 
@@ -90,11 +177,17 @@ const ArticleDetails: React.FC = () => {
     if (!article) return;
     try {
       await axios.post(`${API_URL}/analysis/articles/${article._id}/reject`);
-      setMessage('Article rejected.');
-      router.back();
+      toast.success('Article rejected.', {
+        autoClose: 3000,
+        onClose: () => {
+          router.back();
+        },
+      });
     } catch (error) {
       console.error('Error rejecting article:', error);
-      setMessage('Error rejecting article.');
+      toast.error('Error rejecting article.', {
+        autoClose: 3000,
+      });
     }
   };
 
@@ -124,17 +217,33 @@ const ArticleDetails: React.FC = () => {
         Software Engineering Practice: <b>{article.se_practice || 'No SE practice available'}</b>
       </div>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Summary</h2>
-        <p className={styles.text}>{article.summary}</p>
-      </div>
+      <p className={formStyles.sectionSeparator}><span>Summary</span></p>
+      <p className={styles.text}>{article.summary}</p>
 
-      <h2 className={styles.sectionTitle}>Claims</h2>
-      <p className={styles.text}>{article.claim || 'No claim available'}</p>
+      <p className={formStyles.sectionSeparator}><span>Claim</span></p>
 
-      <h2 className={styles.sectionTitle}>Evidence of the Claims</h2>
+      {activeEditField === 'claim' ? (
+        <textarea
+          className={styles.input}
+          value={claim}
+          onChange={(e) => setClaim(e.target.value)}
+          placeholder="Enter the claim"
+          rows={5}
+          cols={50}
+        ></textarea>
+      ) : (
+        <p className={styles.text}>{article.claim || 'No claim available'}</p>
+      )}
 
-      {isEditing ? (
+      {activeEditField === 'claim' ? (
+        <button className={formStyles.addButton} onClick={handleSaveClaim}>Save Claim</button>
+      ) : (
+        <button className={formStyles.addButton} onClick={() => handleEdit('claim')}>Edit Claim</button>
+      )}
+
+      <p className={formStyles.sectionSeparator}><span>Evidence of the Claim</span></p>
+
+      {activeEditField === 'evidence' ? (
         <textarea
           className={styles.input}
           value={evidence}
@@ -147,19 +256,59 @@ const ArticleDetails: React.FC = () => {
         <p className={styles.text}>{article.evidence || 'No Evidence available'}</p>
       )}
 
-      {isEditing ? (
-        <button className={fromStyles.addButton} onClick={handleSaveEvidence}>Save Evidence</button>
+      {activeEditField === 'evidence' ? (
+        <button className={formStyles.addButton} onClick={handleSaveEvidence}>Save Evidence</button>
       ) : (
-        <button className={fromStyles.addButton} onClick={handleEdit}>Edit</button>
+        <button className={formStyles.addButton} onClick={() => handleEdit('evidence')}>Edit Evidence</button>
       )}
 
-      <br />
-      <button className={fromStyles.addButton} onClick={handleApprove}>Approve and Publish</button>
-      <button className={fromStyles.removeButton} style={{ margin: '1em' }} onClick={handleReject}>Reject</button>
-      <br />
-      <button className={fromStyles.addButton} onClick={() => router.back()}>Back to Dashboard</button>
+      <p className={formStyles.sectionSeparator}><span>Analysis Notes</span></p>
 
-      {message && <p>{message}</p>}
+      {activeEditField === 'analysis_notes' ? (
+        <textarea
+          className={styles.input}
+          value={analysisNotes}
+          onChange={(e) => setAnalysisNotes(e.target.value)}
+          placeholder="Enter your analysis notes"
+          rows={5}
+          cols={50}
+        ></textarea>
+      ) : (
+        <p className={styles.text}>{article.analysis_notes || 'No analysis notes available'}</p>
+      )}
+
+      {activeEditField === 'analysis_notes' ? (
+        <button className={formStyles.addButton} onClick={handleSaveAnalysisNotes}>Save Analysis Notes</button>
+      ) : (
+        <button className={formStyles.addButton} onClick={() => handleEdit('analysis_notes')}>Edit Analysis Notes</button>
+      )}
+
+      {/* Evidence Summary Toggle */}
+      <p className={formStyles.sectionSeparator}><span>Evidence Summary</span></p>
+
+      <div className={formStyles.form}>
+        <select
+          className={formStyles.input}
+          value={evidenceSummary ?? ''}
+          onChange={(e) => {
+            const value = e.target.value as 'Weak' | 'Moderate' | 'Strong';
+            setEvidenceSummary(value || null);
+          }}
+          required
+        >
+          <option value="">Select Evidence Strength</option>
+          <option value="Weak">Weak</option>
+          <option value="Moderate">Moderate</option>
+          <option value="Strong">Strong</option>
+        </select>
+      </div>
+      <br />
+      <button className={formStyles.addButton} onClick={handleApprove}>Approve and Publish</button>
+      <button className={formStyles.removeButton} style={{ margin: '1em' }} onClick={handleReject}>Reject</button>
+      <br />
+      <button className={formStyles.addButton} onClick={() => router.back()}>Back to Dashboard</button>
+      <br />
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };

@@ -1,9 +1,12 @@
-import { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { toast, ToastContainer } from 'react-toastify';
 import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import 'react-toastify/dist/ReactToastify.css';
 import SortableTable from "../../components/SortableTable";
 import SearchBar from "../../components/SearchBar";
+import ColumnCustomizationMenu from "../../components/ColumnCustomizationMenu";
+
 
 interface ArticlesInterface {
   id: string;
@@ -12,6 +15,7 @@ interface ArticlesInterface {
   pubyear: string;
   journal: string;
   se_practice: string;
+  doi: string;
   research_type: string;
 }
 
@@ -19,11 +23,25 @@ const API_URL = process.env.NODE_ENV === 'production'
   ? 'https://ense701-g6.vercel.app/api'
   : 'http://localhost:8000/api';
 
-const AllArticles: NextPage = () => {
+const AllArticles = () => {
   const [articles, setArticles] = useState<ArticlesInterface[]>([]);
   const [searchResults, setSearchResults] = useState<ArticlesInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Column customization state
+  const availableColumns = [
+    { key: "title", label: "Title" },
+    { key: "authors", label: "Authors" },
+    { key: "pubyear", label: "Publication Year" },
+    { key: "journal", label: "Journal/Conference" },
+    { key: "se_practice", label: "SE Practice" },
+    { key: "research_type", label: "Research Type" },
+    { key: "doi", label: "Source" },
+    { key: "actions", label: "Actions" },  // action to display or hide the view button
+  ];
+
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(availableColumns.map(col => col.key).concat("actions"));
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -37,12 +55,14 @@ const AllArticles: NextPage = () => {
           journal: article.journal ?? "",
           se_practice: article.se_practice ?? "",
           research_type: article.research_type ?? "",
+          doi: article.doi ?? "",
         }));
 
         setArticles(formattedArticles);
         setSearchResults(formattedArticles);  // Initialize with full list
       } catch (error) {
         console.error("Error fetching articles:", error);
+        toast.error("Failed to load articles.");
         setError("Failed to load articles.");
       } finally {
         setIsLoading(false);
@@ -72,16 +92,6 @@ const AllArticles: NextPage = () => {
     setSearchResults(filteredArticles);
   };
 
-  const headers: { key: keyof ArticlesInterface | "actions"; label: string }[] = [
-    { key: "title", label: "Title" },
-    { key: "authors", label: "Authors" },
-    { key: "pubyear", label: "Publication Year" },
-    { key: "journal", label: "Journal/Conference" },
-    { key: "se_practice", label: "SE Practice" },
-    { key: "research_type", label: "Research Type" },
-    { key: "actions", label: "" },
-  ];
-
   const tableData = searchResults.map((article) => ({
     ...article,
     actions: (
@@ -105,18 +115,35 @@ const AllArticles: NextPage = () => {
   return (
     <div>
       <div className="container">
-        <h1>All Published Articles</h1>
         <SearchBar onSearch={handleSearch} />
+        
+        <ColumnCustomizationMenu
+          availableColumns={availableColumns}
+          selectedColumns={selectedColumns}
+          onColumnChange={setSelectedColumns}
+        />
+        
         {isLoading ? (
           <p>Loading articles...</p>
         ) : error ? (
           <p>{error}</p>
         ) : searchResults.length > 0 ? (
-          <SortableTable headers={headers} data={tableData} />
+          <SortableTable headers={availableColumns.filter(col => selectedColumns.includes(col.key))} data={tableData} />
         ) : (
           <p>No results found.</p>
         )}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

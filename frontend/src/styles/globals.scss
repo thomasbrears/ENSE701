@@ -1,10 +1,48 @@
-// Import fonts from Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* ***------ Light Mode Variables ------*** */
+:root {
+  --background-color: #ffffff; /* White background */
+  --text-color: #23360e; /* Dark green text */
+  --link-color: #7b8f1d; /* Lighter green links */
+  --link-hover-color: #456226; /* Darker green hover color */
+  --button-bg-color: #4CAF50; /* Green button background */
+  --button-text-color: #ffffff; /* White button text */
+  --navbar-background-color: #4CAF50; /* Green navbar background */
+  --footer-background-color: #4CAF50; /* Green footer background */
+  --table-header-bg-color: #006400; /* Dark green table header */
+  --table-body-bg-color: #ffffff; /* White table background */
+  --table-text-color: #23360e; /* Dark green table text */
+  --table-header-text-color: #ffffff; /* White text for table header */
+  --table-row-odd-bg-color: #f2f2f2; /* Light grey for odd rows */
+  --table-row-hover-bg-color: #f9f9f9; /* Light grey hover */
+  --table-row-selected-bg-color: #fff8dc; /* Light yellow for selected rows */
+}
+
+/* ***------ Dark Mode Variables ------*** */
+body.dark-mode {
+  --background-color: #181818; /* Dark background */
+  --text-color: #f5f5f5; /* Light text (adjust this to force light text for dark mode) */
+  --link-color: #9acd32; /* Light green links */
+  --link-hover-color: #a9dc76; /* Light green hover color */
+  --button-bg-color: #333333; /* Dark gray button background */
+  --button-text-color: #ffffff; /* White button text */
+  --navbar-background-color: #2a2a2a; /* Dark gray navbar background */
+  --footer-background-color: #2a2a2a; /* Dark gray footer background */
+  --table-header-bg-color: #1d4215; /* Dark gray table header */
+  --table-body-bg-color: #2a2a2a; /* Dark gray table background */
+  --table-text-color: #f5f5f5; /* Light table text */
+  --table-row-odd-bg-color: #444444; /* Dark grey for odd rows */
+  --table-row-even-bg-color: #333333; /* Dark grey for even rows */
+  --table-row-hover-bg-color: #555555; /* Darker grey hover */
+  --table-row-selected-bg-color: #3d3d3d; /* Darker gray for selected rows */
+}
+
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #ffffff; // white background
-  color: #23360e; // Dark green
+  background-color: var(--background-color);  
+  color: var(--text-color);
   margin: 0;
   padding: 0;
   line-height: 1.6;
@@ -18,24 +56,82 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', sans-serif;
-  color: #23360e; // Dark green
+  color: var(--text-color); 
   text-align: center;
 }
 
 a {
-  color: #7b8f1d; // Lighter green
+  color: var(--link-color);
   text-decoration: none;
   transition: color 0.3s;
 }
 
 a:hover {
-  color: #456226; //  lighter green
+  color: var(--link-hover-color);
 }
 
+/* ***------- Navbar Styles ------*** */
+.navbar {
+  background-color: var(--navbar-background-color);
+  padding: 1em 2em;
+}
+
+.navbar .title {
+  color: #d0b50b; 
+  font-size: 2em;
+}
+
+.navbar .title:hover {
+  color: #ffffff; 
+}
+
+.hamburger {
+  display: none;
+  font-size: 2em;
+  color: #ffffff;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+.navLinks {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    display: none;
+    background-color: var(--navbar-background-color); 
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    padding: 1em;
+  }
+}
+
+.show {
+  display: flex !important;
+}
+
+.navitem {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1em;
+}
+
+.navitem:hover {
+  color: var(--link-hover-color); 
+}
+
+/* ***------ Button Styles ------*** */
 button {
   font-family: inherit;
-  color: #ffffff; // White
-  background-color: #23360e; // Dark green
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
   border: none;
   padding: 0.75em 1.5em;
   border-radius: 5px;
@@ -44,12 +140,107 @@ button {
 }
 
 button:hover {
-  background-color: #456226; // lighter green
+  background-color: var(--link-hover-color);
 }
 
-.rating {
-  margin-left: 10px;
-  display: flex;
-  gap: 5px;
-  font-size: 24px;
+/* ***------ Footer Styles ------*** */
+.footer {
+  background-color: var(--footer-background-color);
+  padding: 2em;
+  color: var(--text-color);
+  text-align: center;
+}
+
+/* ***------- Table Styles -------*** */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--table-body-bg-color); 
+  color: var(--table-text-color); 
+  border: none; 
+}
+
+th {
+  background-color: var(--table-header-bg-color);
+  color: var(--table-header-text-color);
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border: none; 
+  color: var(--table-text-color); 
+}
+
+tr:nth-child(odd) td {
+  background-color: var(--table-row-odd-bg-color); //odd row bg
+}
+
+tr:nth-child(even) td {
+  background-color: var(--table-row-even-bg-color); //even row bg
+}
+
+tr:hover td {
+  background-color: var(--table-row-hover-bg-color); //hover colour
+}
+
+tr.selected td {
+  background-color: var(--table-row-selected-bg-color); //select row colour
+}
+
+/* Dropdown Styles */
+.adminDropdownContent {
+  display: none;
+  position: absolute;
+  background-color: var(--navbar-background-color); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.adminDropdown:hover .adminDropdownContent {
+  display: block;
+}
+
+.adminDropdownContent a {
+  color: var(--text-color); 
+  padding: 0.75em 1.5em;
+  text-decoration: none;
+  display: block;
+} 
+
+.adminDropdownContent a:hover {
+  background-color: var(--link-hover-color); 
+}
+
+/* styling for article details (was running into some override issues) */
+
+body.dark-mode h2,
+body.dark-mode h2.sectionTitle,
+body.dark-mode .sectionTitle {
+  color: #ffffff !important; //forcing
+}
+
+body.dark-mode .text, 
+body.dark-mode .subtitle, 
+body.dark-mode .sectionTitle,
+body.dark-mode h2 { 
+  color: #ffffff !important;
+}
+
+
+body.dark-mode h1,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #ffffff !important;
+}
+
+.fade-in {
+  opacity: 1; /* The opacity of the final state is 1. */
+  transition: opacity 0.3s ease-in-out; /* Animation time is 0.3 seconds. */
+}
+
+.fade-out {
+  opacity: 0; /* The opacity of the initial state is 0 */
+  transition: opacity 0.3s ease-in-out; /* Animation time is 0.3 seconds. */
 }

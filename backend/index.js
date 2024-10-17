@@ -1,11 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import { connectToDb } from './db.js';
+import adminRoutes from './routes/admin.js';
 import articleRoutes from './routes/articles.js';
 import searchRoutes from './routes/search.js';
 import analysisRoutes from './routes/analysis.js';
 import moderationRoutes from './routes/moderation.js';
 import scoreRoutes from './routes/scores.js';
+import roleRoutes from './routes/roles.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,11 +24,13 @@ app.use(express.json());
 const PORT = process.env.PORT || 8000;
 
 // Routes
+app.use('/api/admin', adminRoutes);
 app.use('/api/articles', articleRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/analysis', analysisRoutes);
 app.use('/api/moderation', moderationRoutes);
 app.use('/api/scores', scoreRoutes);
+app.use('/api/roles', roleRoutes);
 
 // Connect to the database and start the server
 connectToDb(() => {

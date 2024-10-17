@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react';
+import styles from '../styles/Loading.module.scss';
 
-const Loading = () => {
+const Loading: React.FC = () => {
   return (
-    <div>
-      <h3>Loading...</h3>
+    <div className={styles.loadingOverlay}>
+      <div className={styles.spinner}></div>
     </div>
   );
 };
