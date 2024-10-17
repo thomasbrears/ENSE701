@@ -1,12 +1,12 @@
-/* --- Light Mode --- */
+/* ***------ Light Mode ------*** */
 .container {
   max-width: 800px;
   margin: 2em auto;
   padding: 2em;
-  background-color: #ffffff; /* White background */
+  background-color: #ffffff; //white bg
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  color: #000000; /* Black text */
+  color: #000000; //black text
 }
 
 .header {
@@ -18,7 +18,15 @@
 }
 
 .field {
-  position: relative; 
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin-bottom: 0.5em;
+  color: #23360e; //dark green label 
 }
 
 .field input,
@@ -29,42 +37,36 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1em;
-  width: 100%; 
+  width: 95%; 
   font-family: 'Roboto', sans-serif;
   color: #000000; 
   background-color: #ffffff; 
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.searchIcon {
-  position: absolute;
-  right: 22px; 
-  top: 50%; 
-  transform: translateY(-50%); 
-  font-size: 18px;
-  color: #000000; 
+.input {
+  margin-left: 8px;
 }
 
-.searchIconDark {
-  color: #a9dc76 !important; 
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  outline: none;
 }
 
-.field input::placeholder,
-.field textarea::placeholder,
-.input::placeholder {
-  color: #666666 !important;
-}
-
-/* --- Dark Mode --- */
+/* ***------ Dark Mode ------*** */
 .darkModeContainer {
-  background-color: #333333 !important;
+  background-color: #333333 !important; //dark grey bg
   color: #f5f5f5 !important; 
 }
 
 .inputFieldDark {
   background-color: #444444 !important; 
-  color: #f5f5f5 !important;
-  border: 1px solid #666666 !important; 
+  color: #f5f5f5 !important; 
+  border: 1px solid #666666 !important; //dark grey border
 }
 
 .inputFieldDark::placeholder {
@@ -81,15 +83,79 @@
 }
 
 .submitButtonDark:hover {
-  background-color: #000000 !important; 
+  background-color: #000000 !important;
 }
-
 
 .darkModeContainer label {
   color: #f5f5f5 !important; 
 }
 
-
 .darkModeContainer .header {
-  color: #f5f5f5 !important;
+  color: #f5f5f5 !important; 
+}
+
+.addButton, .submitButton {
+  background-color: #006400; 
+  color: #ffffff; 
+  border: none;
+  padding: 0.75em 1.5em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addButton:hover, .submitButton:hover {
+  background-color: #000000; /* Black on hover */
+}
+
+.shortTextField {
+  max-width: 150px;
+}
+
+.longTextField {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.inlineGroup {
+  display: flex;
+  gap: 1em;
+}
+
+.inlineItem {
+  flex: 1;
+}
+
+.authorField {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 0.5em;
+}
+
+.removeButton {
+  background-color: #e74c3c; //red
+  color: #fff; 
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.removeButton:hover {
+  background-color: #c0392b; 
+}
+
+//icon adjustment cause i broke formatting
+.searchIcon {
+  position: absolute;
+  right: 22px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  font-size: 18px;
+  color: #000000; /// black colour for dark mode
+}
+
+.searchIconDark {
+  color: #a9dc76 !important; //green for dark mode
 }

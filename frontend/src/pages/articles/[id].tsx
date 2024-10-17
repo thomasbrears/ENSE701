@@ -8,6 +8,7 @@ import styles from "../../styles/ArticleDetails.module.scss";
 import Rating from "../../components/Rating";
 import BarChartEx from "../../components/BarChartEx";
 
+
 // Define the props for the article details
 interface ArticleDetailsProps {
   article: {

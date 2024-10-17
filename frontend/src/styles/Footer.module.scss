@@ -1,7 +1,6 @@
-/* Light Mode */
 .footer {
-  background-color: #006400; /* Green background */
-  color: #fff; /* White text */
+  background-color: #006400; // green
+  color: #fff; // white text
   padding: 2rem 0;
   text-align: center;
   display: flex;
@@ -28,12 +27,12 @@
 .title {
   font-family: 'Roboto', sans-serif;
   font-size: 2em;
-  color: #d0b50b; /* Yellow-green */
+  color: #d0b50b; // yellow-green
 }
 
 .subtitle {
   font-size: 1.1rem;
-  color: #fff; /* White text */
+  color: #fff; // white
 }
 
 .navLinks, .about {
@@ -43,7 +42,7 @@
   h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #d0b50b; /* Yellow*/
+    color: #d0b50b; // green on hover
     text-align: left;
   }
 
@@ -56,12 +55,12 @@
 
       a {
         font-size: 1rem;
-        color: #fff; /* White */
+        color: #fff; // white
         text-decoration: none;
         transition: color 0.3s;
 
         &:hover {
-          color: #d0b50b; /* Yellow on hover */
+          color: #d0b50b; // yellow-green on hover
         }
       }
     }
@@ -70,76 +69,33 @@
   p {
     font-size: 1rem;
     line-height: 1.5;
-    color: #fff; /* White */
+    color: #fff; // white
   }
 }
 
 .footerBottom {
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #fff; /* White border */
+  border-top: 1px solid #fff;
 
   p {
     margin: 0.5rem 0;
-    color: #ccc; /* Light grey */
+    color: #ccc; // light grey
     font-size: 0.9rem;
   }
 
   .githubLink {
-    color: #000; /* Black */
+    color: #000; // black
     margin-left: 8px;
     transition: color 0.3s;
 
     &:hover {
-      color: #d0b50b; /* Yellow on hover */
+      color: #d0b50b; 
     }
   }
 }
 
-/* Dark Mode */
-.footerDark {
-  background-color: #333333 !important; /* dark gray bg for dark mode */
-  color: #f5f5f5 !important; /* Light text in dark mode */
-}
-
-.titleDark {
-  color: #d0b50b !important; /* Yellow for title in dark mode */
-}
-
-.navLinksDark, .aboutDark {
-  h3 {
-    color: #d0b50b !important; /* Yellow for headings in dark mode */
-  }
-
-  ul li a {
-    color: #f5f5f5 !important; /* Light text for links in dark mode */
-
-    &:hover {
-      color: #d0b50b !important; /* Yellow on hover in dark mode */
-    }
-  }
-
-  p {
-    color: #f5f5f5 !important; 
-  }
-}
-
-.footerBottomDark {
-  border-top: 1px solid #ccc !important; /* Light grey border */
-  
-  p {
-    color: #ccc !important; /* Light grey text in dark mode */
-  }
-
-  .githubLink {
-    color: #f5f5f5 !important; /* Light text for GitHub link in dark mode */
-
-    &:hover {
-      color: #d0b50b !important; /* Yellow on hover in dark mode */
-    }
-  }
-}
-
+// Responsive Design
 @media (max-width: 768px) {
   .footerContainer {
     flex-direction: column;

@@ -7,6 +7,7 @@ import SortableTable from "../../components/SortableTable";
 import SearchBar from "../../components/SearchBar";
 import ColumnCustomizationMenu from "../../components/ColumnCustomizationMenu";
 
+
 interface ArticlesInterface {
   id: string;
   title: string;
@@ -37,8 +38,10 @@ const AllArticles = () => {
     { key: "se_practice", label: "SE Practice" },
     { key: "research_type", label: "Research Type" },
     { key: "doi", label: "Source" },
+    { key: "actions", label: "Actions" },  // action to display or hide the view button
   ];
-  const [selectedColumns, setSelectedColumns] = useState<string[]>(availableColumns.map(col => col.key));
+
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(availableColumns.map(col => col.key).concat("actions"));
 
   useEffect(() => {
     const fetchArticles = async () => {
