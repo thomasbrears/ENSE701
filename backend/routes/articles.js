@@ -105,7 +105,7 @@ router.post('/', async (req, res) => {
       `Submission Received: ${title}`, // email subject then body (in HTML format)
       `
       <p>Kia ora ${user_name},</p>
-      <p>Thank you for submitting your article titled "<strong>${title}</strong>".</p>
+      <p>Thank you for   submitting your article titled "<strong>${title}</strong>".</p>
       <p>This email is to comfirm that your article submission has been received and is now in the queue for a moderator and analyst to review.<br/> We will contact you again soon once this process is complete</p>
       <p><br/><strong>Article Name</strong>: ${title}<br/>
       <strong>Date of Submission</strong>: ${submissionDate}<br/>
