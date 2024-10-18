@@ -20,7 +20,7 @@ const app = express();
 // dynamic cors options
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://ense701-g6.vercel.app' 
+    ? 'https://cise-aut.vercel.app' 
     : true,  // Allow all origins in development
   methods: 'GET,POST,PUT,DELETE,OPTIONS',
   credentials: true
