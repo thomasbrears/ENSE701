@@ -13,10 +13,10 @@ const ThemeToggleButton: React.FC = () => {
         border: "none",
         borderRadius: "4px",
         cursor: "pointer",
-        position: "absolute",      //just placed it to overlap the navbar, was having issues
-        top: "27px",            
-        right: "30px",        
-        zIndex: 1000,           
+        height: "100%", 
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       {theme === "dark" ? "Light" : "Dark"} Mode
