@@ -20,6 +20,7 @@
 .field {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1.5em; 
 }
 
 .field label {
@@ -42,6 +43,7 @@
   color: #000000; 
   background-color: #ffffff; 
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1em; 
 }
 
 .input {
@@ -102,10 +104,11 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 1em; 
 }
 
 .addButton:hover, .submitButton:hover {
-  background-color: #000000; /* Black on hover */
+  background-color: #000000; 
 }
 
 .shortTextField {
@@ -120,6 +123,7 @@
 .inlineGroup {
   display: flex;
   gap: 1em;
+  margin-bottom: 1.5em; 
 }
 
 .inlineItem {
@@ -129,7 +133,7 @@
 .authorField {
   display: flex;
   gap: 1em;
-  margin-bottom: 0.5em;
+  margin-bottom: 1.5em; 
 }
 
 .removeButton {

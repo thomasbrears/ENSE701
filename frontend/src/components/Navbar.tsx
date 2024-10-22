@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../styles/Nav.module.scss";
 import { useTheme } from "../context/ThemeContext"; // Import the theme context
+import ThemeToggleButton from "./ThemeToggleButton"; // Import the toggle button
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,9 @@ const NavBar = () => {
           {/* Analyst Dashboard */}
           <NavItem route="/analyst/analyst-dashboard" darkMode={theme === "dark"}>Analyst</NavItem>
         </div>
+
+        {/* Add the ThemeToggleButton at the top-right corner */}
+        <ThemeToggleButton /> {/* This will be positioned absolutely in the top-right */}
       </nav>
     </div>
   );
