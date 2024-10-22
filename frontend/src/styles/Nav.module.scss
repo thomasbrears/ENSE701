@@ -68,6 +68,15 @@ body.dark-mode .navitem:hover {
   color: #d0b50b !important; //yellow hover
 }
 
+//i just pasted the old styling for the hamburger from old commits. Hope this works
 .hamburger {
-  display: none !important; 
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: #ffffff; // white
+  margin-left: auto; // Ensure it stays to the right of the title
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 }
