@@ -25,7 +25,7 @@ SPEED is a peer-reviewed database of software engineering related articles. We r
 
 
 ## Getting Started
-Follow these steps to get **PriceHound** locally on your machine.
+Follow these steps to get **SPEED** locally on your machine.
 
 #### Prerequisites
 Ensure you have the following installed:
