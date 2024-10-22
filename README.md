@@ -1,5 +1,5 @@
 # SPEED - Software Practical Empirical Evidence Database
-##### ENSE701: CISE Assignmnet 1B, group project repository
+##### ENSE701: CISE Assignment 1B, group project repository
 
 Welcome to the **SPEED** repository for group W203-06. This project is being developed as part of our university course, COMP701: Contemporary Issues in Software Engineering at Auckland University of Technology (AUT) in Aotearoa New Zealand in 2024.
 
